@@ -38,7 +38,7 @@
                         <% alunos.forEach(function(item) { %>
                             <tr>
                                 <label hidden><%= item.id %></label>
-                                <td><%= item.fase_negociacao ? item.fase_negociacao : 'Não iniciada'%></td>
+                                <td class="<%= item.fase_negociacao ? 'badge text-bg-info' : 'badge text-bg-secondary' %>"><%= item.fase_negociacao ? item.fase_negociacao : 'Não iniciada'%></td>
                                 <td><%= item.nome_aluno %></td>
                                 <td><%= item.turma_atual %></td>
                                 <td><%= item.nome_responsavel %></td>
@@ -52,7 +52,7 @@
                                         <button type="submit" class="btn btn-primary btn-sm">Rematricular</button>
                                       </form>
                                     <% } else { %>
-                                      <button type="submit" class="btn btn-secondary btn-sm" disabled>Rematriculado</button>
+                                      <button type="submit" class="btn btn-success btn-sm" disabled>Rematriculado</button>
                                     <% } %>
                                 </td>
                             </tr>

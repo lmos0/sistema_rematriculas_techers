@@ -75,24 +75,43 @@ async function getAlunos(req, res) {
 
 async function confirmarAceite(req, res) {
     const id = req.params.id;
-    const rematricula = await Rematricula.findByPk(id);
+    const {cpf_responsavel} = req.body
+    const rematricula = await Rematricula.findByPk(id)
+
+    if (!id || !cpf_responsavel) {
+        return res.status(400).send("ID e CPF do responsável são obrigatórios")
+    }
+
+    const transaction = await sequelize.transaction()
+
+    try {
+        const rematricula = await Rematricula.findByPk(id, {transaction})
 
     if (!rematricula) {
-        return res.status(404).send("Rematrícula não encontrada");
+        await transaction.rollback()
+        return res.status(404).json({error: "Rematrícula não encontrada"})  
     }
 
-    if(rematricula.cpf_responsavel !== req.body.cpf_responsavel){
-        return res.status(400).send("CPF do responsável não confere");
+    if(rematricula.cpf_responsavel !== cpf_responsavel){
+        await transaction.rollback()
+        return res.status(400).json({error: "CPF do responsável não confere"})
     }
 
-    // Atualiza o campo 'aceite' para true
-    rematricula.aceite = true;
-    rematricula.data_aceite = new Date();
-    await rematricula.save();
+    
+    rematricula.aceite = true
+    rematricula.data_aceite = new Date()
+    await rematricula.save({transaction})
+    await transaction.commit()
+    console.log(`Rematrícula ${id} confirmada com sucesso`)
 
-    res.redirect('/sucesso'); // Redireciona para uma página de sucesso ou outra de sua escolha
+    return res.status(201).redirect('/sucesso')
 }
-
+catch(err){
+    await transaction.rollback()
+    console.error(`Erro ao confirmar aceite da rematrícula ${id}: ${error.message}`);
+    return res.status(500).json({error: err.message})
+}
+}
 async function getRematriculaById(req, res) {
     const id = req.params.id;
     const rematricula = await Rematricula.findByPk(id);
