@@ -12,6 +12,11 @@
     <%- include('includes/navbar') %>
     <div class="container my-5">
         <h1 class="text-center mb-4">Lista de Alunos TECHERS</h1>
+        
+        <div class="mb-3">
+            <p>Total de Alunos: <%= totalAlunos %></p>
+            <p>Página <%= currentPage %> de <%= totalPages %></p>
+        </div>
 
         <div class="table-responsive">
             <table class="table table-bordered table-striped">
@@ -49,17 +54,40 @@
                                     <% } else { %>
                                       <button type="submit" class="btn btn-secondary btn-sm" disabled>Rematriculado</button>
                                     <% } %>
-                                  </td>
+                                </td>
                             </tr>
                         <% }); %>
                     <% } else { %>
                         <tr>
-                            <td colspan="8" class="text-center">Nenhum aluno encontrado no sistema.</td>
+                            <td colspan="9" class="text-center">Nenhum aluno encontrado no sistema.</td>
                         </tr>
                     <% } %>
                 </tbody>
             </table>
         </div>
+
+        <!-- Pagination controls -->
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                <% if (currentPage > 1) { %>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=<%= currentPage - 1 %>">&laquo; Anterior</a>
+                    </li>
+                <% } %>
+                
+                <% for(let i = 1; i <= totalPages; i++) { %>
+                    <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                        <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                    </li>
+                <% } %>
+                
+                <% if (currentPage < totalPages) { %>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=<%= currentPage + 1 %>">Próxima &raquo;</a>
+                    </li>
+                <% } %>
+            </ul>
+        </nav>
     </div>
 
     <!-- Bootstrap JS and dependencies -->

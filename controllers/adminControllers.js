@@ -3,34 +3,74 @@ const Rematricula = require('../model/rematricula')
 const Admin = require('../model/admin')
 
 async function addAluno(req,res){
-    const {nome_aluno, nome_responsavel, cpf_responsavel, fase_negociacao, turma_atual, modalidade, mensalidade_2024} = req.body
+    const {nome_aluno,
+         nome_responsavel, 
+         cpf_responsavel, 
+         fase_negociacao, 
+         turma_atual, 
+         modalidade, 
+         mensalidade_2024} = req.body
+
+        if (!nome_aluno || !nome_responsavel || !cpf_responsavel || !turma_atual || !modalidade || !mensalidade_2024) {
+            return res.status(400).send("Todos os campos são obrigatórios");
+        }
 try{
     const rematricula = await Rematricula.create({nome_aluno, nome_responsavel, cpf_responsavel, turma_atual, modalidade, mensalidade_2024})
-    res.status(201).json(rematricula)
+    return res.status(201).json(rematricula)
 }
 catch(err){
-    res.status(400).json({error: err.message})
+    console.error('Erro ao adicionar aluno:', err)
+    return res.status(500).json({error: err.message})
 
 }
 }
 
 async function getRematricular(req,res){
-    const id = req.params.id
+    const {id} = req.params
+
+    if(!id){
+        return res.status(400).json({error: "ID não informado"})
+    }
+
+    try{
     const rematricula = await Rematricula.findByPk(id)
     if(!rematricula){
         return res.status(404).send("Rematrícula não encontrada")
     }
     rematricula.fase_negociacao = 'Iniciada'
     await rematricula.save()
-    res.render('rematricula', {rematricula})
+    return res.render('rematricula', {rematricula})
+}
+catch(err){
+    console.error('Erro ao buscar rematrícula:', err)
+    return res.status(500).json({error: err.message})
+}
 }
 
-async function getAlunos(req,res){
-    const alunos = await Rematricula.findAll()
-    // alunos.forEach(rematricula => {
-    //     console.log(rematricula.data_aceite);
-    //   });
-    res.render('alunos', {alunos})
+async function getAlunos(req, res) {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
+
+    const { count, rows: alunos } = await Rematricula.findAndCountAll({
+      limit,
+      offset,
+      order: [['nome_aluno', 'ASC']],
+    });
+
+    const totalPages = Math.ceil(count / limit);
+
+    res.render('alunos', {
+      alunos,
+      currentPage: page,
+      totalPages,
+      totalAlunos: count,
+    });
+  } catch (error) {
+    console.error('Erro ao buscar alunos:', error);
+    res.status(500).render('error', { message: 'Erro ao carregar a lista de alunos.' });
+  }
 }
 
 async function confirmarAceite(req, res) {
