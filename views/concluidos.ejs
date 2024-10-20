@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="icon-red.svg" type="image/svg+xml">
+    <title>Rematriculas Concluídas</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <%- include('includes/navbar') %>
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Alunos Rematriculados para 2025</h1>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Aluno</th>
+                        <th>Turma 2025</th>
+                        <th>Mensalidade 2025</th>
+                        <th>Parcelas</th>
+                        <th>Total</th>
+                        <th>Forma de Pagamento</th>
+                        <th>Data de Confirmação</th>
+                        <th>Pagamento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (rematriculas.length > 0) { %>
+                        <% rematriculas.forEach(function(item) { %>
+                            <tr>
+                                <label hidden><%= item.id %></label>
+                                <td><%= item.nome_aluno %></td>
+                                <td><%= item.turma_2025 %></td>
+                                <td>R$ <%= item.mensalidade_2025.toFixed(2) %></td>
+                                <td><%= item.quantidade_parcelas %></td>
+                                <td><%= (item.mensalidade_2025 * item.quantidade_parcelas).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
+                                <td><%= item.forma_de_pagamento %></td>
+                                <td><%= item.data_aceite ? new Date(item.data_aceite).toLocaleDateString('pt-BR') : '' %></td>
+                                <td><button class="btn btn-success" disabled>Confirmado</button>
+                                  </td>
+                            </tr>
+                        <% }); %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="8" class="text-center">Nenhuma rematrícula encontrada.</td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

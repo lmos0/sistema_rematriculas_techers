@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="icon-red.svg" type="image/svg+xml">
+    <title>Confirmação de Rematrícula</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="text-center mt-4">
+        <img src="https://techers.com.br/wp-content/uploads/2023/05/logo.png" alt="Logo TECHERS" class="img-fluid" style="max-width: 200px; height: auto;">
+    </div>
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Confirmação de Rematrícula</h1>
+
+        <p class="lead text-center">
+            <strong><%= rematricula.nome_responsavel %></strong> confirma a rematrícula do(a) aluno(a)
+            <strong><%= rematricula.nome_aluno %></strong> para o ano de 2025 em  <%= rematricula.quantidade_parcelas %> parcela(s) no valor de R$ <%= rematricula.mensalidade_2025.toFixed(2) %></strong>, totalizando  <%= (rematricula.mensalidade_2025 * rematricula.quantidade_parcelas).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %> 
+            <strong>
+        </p>
+
+        <form action="/rematricula/<%= rematricula.id %>/aceite" method="POST" class="text-center">
+            <div class="mb-3">
+                <input type="text" name="cpf_responsavel" class="form-control" placeholder="Digite seu CPF para confirmar a rematrícula" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Confirmar Aceite</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
