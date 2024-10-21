@@ -157,9 +157,9 @@ async function confirmarMensalidadeTurma(req, res) {
         rematricula.turma_2025 = turma_2025
         rematricula.quantidade_parcelas = quantidade_parcelas
         rematricula.forma_de_pagamento = forma_de_pagamento
-        // rematricula.turma_2025 = req.body.turma_2025; // If you plan to use this field
+        
        
-        // Save the updated record
+       
         await rematricula.save();
 
         // Redirect to success page
@@ -232,6 +232,15 @@ async function loginAdmin(req,res){
 
 
 module.exports = {
-    addAluno, getAlunos, confirmarAceite, getRematriculaById, renderAlunoSelect, getRematricular, confirmarMensalidadeTurma,
-    renderMatriculasConcluidas, growTechers, registerAdmin, loginAdmin
+    addAluno,
+    confirmarAceite,
+    confirmarMensalidadeTurma,
+    getAlunos,
+    getRematriculaById,
+    getRematricular,
+    growTechers,
+    loginAdmin,
+    registerAdmin,
+    renderAlunoSelect,
+    renderMatriculasConcluidas
 }
