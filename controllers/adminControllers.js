@@ -120,13 +120,22 @@ async function getRematriculaById(req, res) {
         return res.status(404).send("Rematrícula não encontrada");
     }
 
+    if(!rematricula.turma_2025 || !rematricula.mensalidade_2025 || !rematricula.quantidade_parcelas || !rematricula.forma_de_pagamento){
+        return res.status(400).send("Rematrícula não está completa")
+    }
+
+try{
     if (rematricula.aceite === true) {
         return res.status(208).render('aceiteconfirmado', { rematricula });
     }
 
     res.render('aceite', { rematricula });
 }
-
+catch(err){
+    console.error('Erro ao buscar rematrícula:', err)
+    return res.status(500).json({error: err.message})
+}
+}
 async function confirmarMensalidadeTurma(req, res) {
     const id = req.params.id;
     const { mensalidade_2025, turma_2025, quantidade_parcelas, forma_de_pagamento } = req.body;
