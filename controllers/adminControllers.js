@@ -16,11 +16,14 @@ async function addAluno(req,res){
          level_atual, 
          valor_2024} = req.body
 
+         level_2025 = level_atual + 1
+         valor_2025 = valor_2024 * 1.1
+
         if (!nome_aluno || !nome_responsavel || !cpf_responsavel || !curso || !level_atual || !valor_2024) {
             return res.status(400).json("Todos os campos são obrigatórios");
         }
 try{
-    const rematricula = await Aluno.create({nome_aluno, nome_responsavel, cpf_responsavel, curso, level_atual, valor_2024})
+    const rematricula = await Aluno.create({nome_aluno, nome_responsavel, cpf_responsavel, curso, level_atual, valor_2024, level_2025, valor_2025})
     return res.status(201).json(rematricula)
 }
 catch(err){

@@ -43,7 +43,7 @@
                                 <td><%= item.nome_aluno %></td>
                                 <td><%= item.turma_atual %></td>
                                 <td><%= item.nome_responsavel %></td>
-                                <td><%= item.mensalidade_2024.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %></td>
+                                <td><%= item.valor_2024.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %></td>
                                 <td><%= item.cpf_responsavel %></td>
                                 <td><%= item.aceite ? 'Confirmado' : 'Pendente' %></td>
                                 <td><%= item.data_aceite ? new Date(item.data_aceite).toLocaleDateString('pt-BR') : '' %></td>

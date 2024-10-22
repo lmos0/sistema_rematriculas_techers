@@ -11,13 +11,20 @@ async function getRematricular(req,res){
     }
 
     try{
-    const rematricula = await Rematricula.findByPk(id)
-    if(!rematricula){
+    const aluno = await Aluno.findByPk(id)
+    const turmas_possiveis = await Turma.findAll({
+        where: {
+          curso: aluno.curso,
+          level: aluno.level_2025,
+          //modalidade: modalidade
+        }
+      });
+
+    if(!aluno){
         return res.status(404).send("Rematrícula não encontrada")
     }
-    rematricula.fase_negociacao = 'Iniciada'
-    await rematricula.save()
-    return res.render('rematricula', {rematricula})
+    await aluno.save()
+    return res.render('rematricula', {aluno , turmas_possiveis})
 }
 catch(err){
     console.error('Erro ao buscar rematrícula:', err)
@@ -28,7 +35,7 @@ catch(err){
 async function confirmarAceite(req, res) {
     const id = req.params.id;
     const {cpf_responsavel} = req.body
-    const rematricula = await Rematricula.findByPk(id)
+    const aluno = await Aluno.findByPk(id)
 
     if (!id || !cpf_responsavel) {
         return res.status(400).send("ID e CPF do responsável são obrigatórios")
@@ -67,20 +74,25 @@ catch(err){
 
 async function confirmarMensalidadeTurma(req, res) {
     const id = req.params.id;
-    const { mensalidade_2025, turma_2025, quantidade_parcelas, forma_de_pagamento } = req.body;
+    const {turma_2025, quantidade_parcelas, forma_de_pagamento, modalidade } = req.body;
 
     try {
-        const rematricula = await Rematricula.findByPk(id);
+        const aluno = await Aluno.findByPk(id)
+        const novoLevel = aluno.level_2025 + 1
+        const valor_2025 = aluno.valor_2024 * 1.04
+        const turmas_possiveis = await Turma.findAll({
+            where: {
+              curso: aluno.curso,
+              level: novoLevel,
+              modalidade: modalidade
+            }
+          });
 
-        if (!rematricula) {
+        if (!aluno) {
             return res.status(404).send("Rematrícula não encontrada");
         }
+        
 
-
-        // Validate that mensalidade_2025 is a valid number (optional)
-        if (!mensalidade_2025 || isNaN(mensalidade_2025)) {
-            return res.status(400).send("Valor inválido para mensalidade 2025");
-        }
         if (!turma_2025) {
             return res.status(400).send("Turma 2025 inválida")
         }
@@ -91,10 +103,11 @@ async function confirmarMensalidadeTurma(req, res) {
             return res.status(400).send("Forma de pagamento inválida");
         }
         // Update the fields
-        rematricula.mensalidade_2025 = mensalidade_2025
-        rematricula.turma_2025 = turma_2025
-        rematricula.quantidade_parcelas = quantidade_parcelas
-        rematricula.forma_de_pagamento = forma_de_pagamento
+        aluno.valor_2025 = valor_2025
+        aluno.turma_2025 = turma_2025
+        aluno.modade = modalidade
+        aluno.quantidade_parcelas = quantidade_parcelas
+        aluno.forma_de_pagamento = forma_de_pagamento
         
        
        
