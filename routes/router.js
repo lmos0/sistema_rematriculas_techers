@@ -3,11 +3,7 @@ const router = express.Router()
 
 const {
     addAluno,
-    confirmarAceite,
-    confirmarMensalidadeTurma,
-    getAlunos,
     getRematriculaById,
-    getRematricular,
     growTechers,
     loginAdmin,
     registerAdmin,
@@ -15,13 +11,14 @@ const {
     renderMatriculasConcluidas
 } = require('../controllers/adminControllers')
 
+const {confirmarAceite, confirmarMensalidadeTurma, getRematricular} = require('../controllers/appControllers')
+
+
+const {isAuth} = require('../middlewares/is-auth')
 
 router.get('/', (req, res) => {res.render('login')})
 
 router.get('/growtechers', growTechers)
-
-router.get('/alunos', getAlunos)
-router.post('/alunos', addAluno)
 
 router.get('/rematricula/:id', getRematricular)
 router.post('/rematricula/:id', confirmarMensalidadeTurma)
