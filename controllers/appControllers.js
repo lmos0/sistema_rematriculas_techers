@@ -3,6 +3,26 @@ const express = require('express')
 const Aluno = require('../model/aluno')
 const Turma = require('../model/turma')
 
+
+async function buscarAluno(req, res) {
+    const {nome_aluno} = req.body
+
+    if (!nome_aluno) {
+        return res.status(400).send("Nome do aluno é obrigatório")
+    }
+
+    try {
+        const aluno = await Aluno.findOne({where: {nome_aluno: nome_aluno}})
+        if (!aluno) {
+            return res.status(404).send("Aluno não encontrado")
+        }
+        return res.status(200).json(aluno)
+    } catch (error) {
+        console.error("Erro ao buscar aluno:", error)
+        return res.status(500).send("Erro ao buscar aluno")
+    }
+}
+
 async function getRematricular(req,res){
     const {id} = req.params
 
@@ -122,6 +142,7 @@ async function confirmarMensalidadeTurma(req, res) {
 }
 
 module.exports = {
+    buscarAluno,
     confirmarAceite,
     confirmarMensalidadeTurma,
     getRematricular

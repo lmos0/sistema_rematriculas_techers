@@ -11,12 +11,13 @@ const {
     renderMatriculasConcluidas
 } = require('../controllers/adminControllers')
 
-const {confirmarAceite, confirmarMensalidadeTurma, getRematricular} = require('../controllers/appControllers')
+const {buscarAluno, confirmarAceite, confirmarMensalidadeTurma, getRematricular} = require('../controllers/appControllers')
 
 
 const {isAuth} = require('../middlewares/is-auth')
 
-router.get('/', (req, res) => {res.render('login')})
+router.get('/', (req, res) => {res.render('buscar_aluno')})
+router.post('/', buscarAluno)
 
 router.get('/growtechers', growTechers)
 
@@ -30,6 +31,8 @@ router.get('/sucesso', (req, res) => {res.render('sucesso')})
 
 
 router.get('/rematriculados', renderMatriculasConcluidas)
+
+
 
 
 //router.get('/selecionar', renderAlunoSelect)
