@@ -17,7 +17,7 @@
 
         <p class="lead text-center">
             <strong><%= rematricula.nome_responsavel %></strong> confirma a rematrícula do(a) aluno(a)
-            <strong><%= rematricula.nome_aluno %></strong> para o ano de 2025 em  <%= rematricula.quantidade_parcelas %> parcela(s) no valor de R$ <%= rematricula.mensalidade_2025.toFixed(2) %></strong>, totalizando  <%= (rematricula.mensalidade_2025 * rematricula.quantidade_parcelas).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %> 
+            <strong><%= rematricula.nome_aluno %></strong> para o ano de 2025 em  <%= rematricula.quantidade_parcelas %> parcela(s) no valor de R$ <%= rematricula.valor_2025.toFixed(2) %></strong>, totalizando  <%= (rematricula.valor_2025 * rematricula.quantidade_parcelas).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %> 
             <strong>
         </p>
 

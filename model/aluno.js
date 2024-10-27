@@ -63,6 +63,11 @@ const Aluno = sequelize.define('Aluno', {
         allowNull: true,
         defaultValue: null
     },
+    modalidade:{
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: null
+    },
     turma_2025:{
         type: DataTypes.STRING,
         allowNull: true,

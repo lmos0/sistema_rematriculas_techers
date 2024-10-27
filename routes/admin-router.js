@@ -4,7 +4,7 @@ const router = express.Router()
 const {addAluno, addTurma, getAlunos, getTurmas} = require('../controllers/adminControllers')
 
 
-router.get('/', (req, res) => {res.send('Teste')})
+router.get('/', (req, res) => res.render('login'))
 
 router.get('/turmas', getTurmas)
 router.post('/turmas', addTurma)

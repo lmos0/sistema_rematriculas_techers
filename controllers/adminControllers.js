@@ -91,13 +91,13 @@ async function getAlunos(req, res) {
 
 async function getRematriculaById(req, res) {
     const id = req.params.id;
-    const rematricula = await Rematricula.findByPk(id);
+    const rematricula = await Aluno.findByPk(id);
 
     if (!rematricula) {
         return res.status(404).send("Rematrícula não encontrada");
     }
 
-    if(!rematricula.turma_2025 || !rematricula.mensalidade_2025 || !rematricula.quantidade_parcelas || !rematricula.forma_de_pagamento){
+    if(!rematricula.turma_2025 || !rematricula.valor_2025 || !rematricula.quantidade_parcelas || !rematricula.forma_de_pagamento){
         return res.status(400).send("Rematrícula não está completa")
     }
 
@@ -117,7 +117,7 @@ catch(err){
 async function renderAlunoSelect(req, res) {
     try {
         // Buscar todos os alunos, incluindo o nome e o id
-        const alunos = await Rematricula.findAll({
+        const alunos = await Aluno.findAll({
           attributes: ['id', 'nome_aluno'] // Incluir o campo 'id'
         });
         console.log(alunos);
@@ -129,7 +129,7 @@ async function renderAlunoSelect(req, res) {
     }
 
 async function renderMatriculasConcluidas(req,res){
-    const rematriculas = await Rematricula.findAll({
+    const rematriculas = await Aluno.findAll({
         where:{
             aceite: true
         }
@@ -138,7 +138,7 @@ async function renderMatriculasConcluidas(req,res){
 }
 
 async function growTechers(req,res){
-    const rematriculados = await Rematricula.findAll({
+    const rematriculados = await Aluno.findAll({
         where:{
             aceite: true
         }

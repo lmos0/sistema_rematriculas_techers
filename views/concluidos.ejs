@@ -19,7 +19,7 @@
                     <tr>
                         <th>Aluno</th>
                         <th>Turma 2025</th>
-                        <th>Mensalidade 2025</th>
+                        <th>Parcela 2025</th>
                         <th>Parcelas</th>
                         <th>Total</th>
                         <th>Forma de Pagamento</th>
@@ -34,9 +34,9 @@
                                 <label hidden><%= item.id %></label>
                                 <td><%= item.nome_aluno %></td>
                                 <td><%= item.turma_2025 %></td>
-                                <td>R$ <%= item.mensalidade_2025.toFixed(2) %></td>
+                                <td>R$ <%= item.valor_2025.toFixed(2) %></td>
                                 <td><%= item.quantidade_parcelas %></td>
-                                <td><%= (item.mensalidade_2025 * item.quantidade_parcelas).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
+                                <td><%= (item.valor_2025 * item.quantidade_parcelas).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
                                 <td><%= item.forma_de_pagamento %></td>
                                 <td><%= item.data_aceite ? new Date(item.data_aceite).toLocaleDateString('pt-BR') : '' %></td>
                                 <td><button class="btn btn-success" disabled>Confirmado</button>

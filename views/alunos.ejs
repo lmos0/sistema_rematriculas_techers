@@ -26,7 +26,7 @@
                         <th>Aluno</th>
                         <th>Turma 2024</th>
                         <th>Responsável</th>
-                        <th>Mensalidade 2024</th>
+                        <th>Valor da Parcela em 2024</th>
                         <th>CPF do Responsável</th>
                         <th>Aceite</th>
                         <th>Data de Confirmação</th>
@@ -41,7 +41,7 @@
                                 <label hidden><%= item.id %></label>
                                 <td class="<%= item.fase_negociacao ? 'badge text-bg-info' : 'badge text-bg-secondary' %>"><%= item.fase_negociacao ? item.fase_negociacao : 'Não iniciada'%></td>
                                 <td><%= item.nome_aluno %></td>
-                                <td><%= item.turma_atual %></td>
+                                <td><%= item.turma_2024 %></td>
                                 <td><%= item.nome_responsavel %></td>
                                 <td><%= item.valor_2024.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %></td>
                                 <td><%= item.cpf_responsavel %></td>
