@@ -1,4 +1,3 @@
-const express = require('express')
 const bcrypt = require('bcrypt')
 
 //const Rematricula = require('../model/rematricula')
@@ -51,7 +50,7 @@ async function addTurma(req,res){
     }
     try{
         const turma = await Turma.create({nome, curso, level, modalidade, dia_semana, horario, vagas})
-        return res.status(201).json(turma)
+        return res.status(201).redirect('/admin/turmas')
     }
     catch(err){
         console.error('Erro ao adicionar turma:', err)
@@ -59,6 +58,25 @@ async function addTurma(req,res){
         })  
 }
 }
+
+async function deleteTurma(req,res){
+    const id = req.params.id
+    try{
+        const turma = await Turma.findByPk(id)
+        if(!turma){
+            return res.status(404).json("Turma não encontrada")
+        }
+        await turma.destroy()
+        return res.status(200).json("Turma deletada com sucesso")
+    }
+    catch(err){
+        console.error('Erro ao deletar turma:', err)
+        return res.status(500).json({error: err.message})
+    }
+}
+
+
+
 
 async function getTurmas(req,res){
     try{
@@ -102,6 +120,7 @@ async function getAlunos(req, res) {
 async function getRematriculaById(req, res) {
     const id = req.params.id;
     const rematricula = await Aluno.findByPk(id);
+    const turma = await Turma.findOne({where: {curso: rematricula.curso, level: rematricula.level_2025}})
 
     if (!rematricula) {
         return res.status(404).send("Rematrícula não encontrada");
@@ -116,27 +135,13 @@ try{
         return res.status(208).render('aceiteconfirmado', { rematricula });
     }
 
-    res.render('aceite', { rematricula });
+    res.render('aceite', { rematricula, turma });
 }
 catch(err){
     console.error('Erro ao buscar rematrícula:', err)
     return res.status(500).json({error: err.message})
 }
 }
-
-async function renderAlunoSelect(req, res) {
-    try {
-        // Buscar todos os alunos, incluindo o nome e o id
-        const alunos = await Aluno.findAll({
-          attributes: ['id', 'nome_aluno'] // Incluir o campo 'id'
-        });
-        console.log(alunos);
-        res.render('selecionar', { alunos });
-      } catch (error) {
-        console.error('Erro ao buscar alunos:', error);
-        res.status(500).send('Erro no servidor');
-      }
-    }
 
 async function renderMatriculasConcluidas(req,res){
     const rematriculas = await Aluno.findAll({
@@ -192,13 +197,13 @@ async function renderAddTurma (req,res){
 module.exports = {
     addAluno,
     addTurma,
+    deleteTurma,
     getRematriculaById,
     getAlunos,
     getTurmas,
     growTechers,
     loginAdmin,
     registerAdmin,
-    renderAlunoSelect,
     renderAddTurma,
     renderMatriculasConcluidas
 }

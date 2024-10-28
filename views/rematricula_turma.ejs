@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,22 +8,18 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* Container background */
         body {
             background-color: #f8f9fa;
         }
-        /* Card Styling */
         .card {
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        /* Form Section Titles */
         .form-section-title {
             font-weight: bold;
             color: #343a40;
             margin-top: 1.5rem;
         }
-        /* Confirm Button */
         .btn-primary {
             display: flex;
             align-items: center;
@@ -31,15 +27,18 @@
             gap: 0.5rem;
             font-size: 1rem;
         }
+        .modal-header, .modal-footer {
+            background-color: #f8f9fa;
+        }
     </style>
 </head>
 <body>
     <%- include('includes/navbar') %>
 
-    <h3 class="text-center mt-4">Confirmar Rematrícula</h3>
-    <p class="text-center text-muted">Confira e confirme as informações para 2025</p>
-    
     <div class="container my-5">
+        <h3 class="text-center mt-4">Confirmar Rematrícula</h3>
+        <p class="text-center text-muted">Confira e confirme as informações para 2025</p>
+
         <div class="card mb-4">
             <div class="card-body">
                 <h3 class="card-title text-center"><%= aluno.nome_aluno %></h3>
@@ -52,43 +51,72 @@
                 </ul>
             </div>
         </div>
-        <form action="" method="post">
 
-            <p class="form-section-title">Turma para 2025</p>
+        <form action="" method="post" id="rematriculaForm">
+            <p class="form-section-title text-center">Turma para 2025</p>
             <div class="mb-3">
                 <label for="turma_2025" class="form-label">Turma</label>
                 <select name="turma_2025" id="turma_2025" class="form-select" required>
-                    <option name="turma_2025" disabled>Selecione a Turma</option>
+                    <option disabled selected>Selecione a Turma</option>
                     <% turmas_possiveis.forEach(function(turma) { %>
-                        <option value="<%= turma.nome %>"><%= turma.nome + ' ' + turma.modalidade %></option>
+                        <option value="<%= turma.nome %>"><%= turma.curso + ' ' + turma.modalidade + ' ' + turma.dia_semana + ' ' + turma.horario%></option>
                     <% }); %>
                 </select>
             </div>
 
-            <p class="form-section-title">Quantidade de Parcelas</p>
+            <p class="form-section-title text-center">Quantidade de Parcelas</p>
             <div class="mb-3">
-                <select class="form-select" name="quantidade_parcelas" id="parcelas">
+                <label for="parcelas" class="form-label">Parcelamento em até 12x</label>
+                <select class="form-select" name="quantidade_parcelas" id="parcelas" required>
+                    <option value="" disabled selected>Selecione a quantidade de parcelas</option>
                     <% for (let i = 1; i <= 12; i++) { %>
                         <option value="<%= i %>"> <%= i + 'x ' + ' de'%> <%=  (aluno.valor_2025 / i).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %></option>
                     <% } %>
                 </select>
             </div>
+
+            <p class="form-section-title text-center">Forma de Pagamento</p>
             <div class="mb-3">
                 <label for="forma_de_pagamento" class="form-label">Forma de Pagamento</label>
                 <select name="forma_de_pagamento" id="forma_de_pagamento" class="form-select" required>
-                    <option value="" disabled hidden>Selecione Forma de Pagamento</option>
+                    <option value="" disabled selected>Selecione Forma de Pagamento</option>
                     <option value="Boleto Bancário">Boleto Bancário</option>
                     <option value="Cartão de Crédito">Cartão de Crédito</option>
                     <option value="Transferência Bancária">Transferência Bancária</option>
-                    
                 </select>
             </div>
 
-            <div class="d-flex justify-content-center mt-4">
-                <button type="submit" class="btn btn-primary">
+            <!-- Buttons Section -->
+            <div class="d-flex justify-content-between mt-4">
+                <!-- Back Button -->
+                <button type="button" class="btn btn-secondary" onclick="history.back();">Voltar</button>
+
+                <!-- Confirm Button with Modal Trigger -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmationModal">
                     <span>Confirmar Rematrícula</span>
-                    <div class="spinner-border spinner-border-sm text-light d-none" role="status"></div>
                 </button>
+            </div>
+
+            <!-- Confirmation Modal -->
+            <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="confirmationModalLabel">Confirmar Rematrícula</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Tem certeza de que deseja confirmar a rematrícula para <strong><%= aluno.nome_aluno %></strong>?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary" form="rematriculaForm">
+                                <span>Confirmar</span>
+                                <div class="spinner-border spinner-border-sm text-light d-none" role="status"></div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </form>
     </div>
@@ -96,12 +124,12 @@
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.querySelector('form').addEventListener('submit', function() {
-            const spinner = document.querySelector('.spinner-border');
-            const button = document.querySelector('.btn-primary');
-            spinner.classList.remove('d-none');  // Show spinner
-            button.disabled = true;              // Disable button to prevent multiple submissions
-        });
+        // document.getElementById('rematriculaForm').addEventListener('submit', function() {
+        //     const spinner = document.querySelector('.spinner-border');
+        //     const button = document.querySelector('.btn-primary');
+        //     spinner.classList.remove('d-none');
+        //     button.disabled = true;
+        // });
     </script>
 </body>
 </html>

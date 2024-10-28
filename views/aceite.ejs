@@ -12,24 +12,59 @@
     <div class="text-center mt-4">
         <img src="https://techers.com.br/wp-content/uploads/2023/05/logo.png" alt="Logo TECHERS" class="img-fluid" style="max-width: 200px; height: auto;">
     </div>
+    
     <div class="container my-5">
-        <h1 class="text-center mb-4">Confirmação de Rematrícula</h1>
+        <div class="card shadow-lg p-4">
+            <h1 class="text-center mb-4">Confirmação de Rematrícula</h1>
 
-        <p class="lead text-center">
-            <strong><%= rematricula.nome_responsavel %></strong> confirma a rematrícula do(a) aluno(a)
-            <strong><%= rematricula.nome_aluno %></strong> para o ano de 2025 em  <%= rematricula.quantidade_parcelas %> parcela(s) no valor de R$ <%= (rematricula.valor_2025 / rematricula.quantidade_parcelas).toFixed(2) %></strong>, totalizando  <%= (rematricula.valor_2025).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %> 
-            <strong>
-        </p>
-
-        <form action="/rematricula/<%= rematricula.id %>/aceite" method="POST" class="text-center">
-            <div class="mb-3">
-                <input type="text" name="cpf_responsavel" class="form-control" placeholder="Digite seu CPF para confirmar a rematrícula" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Confirmar Aceite</button>
-        </form>
+            <p class="lead text-center">
+                <strong><%= rematricula.nome_responsavel %></strong> confirma a rematrícula do(a) aluno(a) <strong><%= rematricula.nome_aluno %></strong> para a turma de 
+                <strong><%= rematricula.curso %></strong>, que ocorrerá às <strong><%= turma.horario %></strong> de <strong><%= turma.dia_semana %></strong>, no ano de 2025.
+                <br> O pagamento será feito em <strong><%= rematricula.quantidade_parcelas %> parcela(s)</strong> de 
+                <strong><%= (rematricula.valor_2025 / rematricula.quantidade_parcelas).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong>, 
+                com a forma de pagamento escolhida: <strong><%= rematricula.forma_de_pagamento %></strong>. 
+                <br>
+                Valor total: <strong><%= rematricula.valor_2025.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong>.
+            </p>
+            
+            <form action="/rematricula/<%= rematricula.id %>/aceite" method="POST" class="text-center needs-validation" novalidate>
+                <div class="mb-3">
+                    <label for="cpf_responsavel" class="form-label visually-hidden">CPF do Responsável</label>
+                    <input type="text" name="cpf_responsavel" id="cpf_responsavel" class="form-control" 
+                           placeholder="Digite seu CPF para confirmar a rematrícula" required>
+                    <div class="invalid-feedback">
+                        Por favor, insira um CPF válido de 11 dígitos.
+                    </div>
+                </div>
+                <!-- Buttons Section -->
+                <div class="d-flex justify-content-center gap-3">
+                    <!-- Back Button -->
+                    <a href="/rematricula/<%= rematricula.id %>/turma" class="btn btn-secondary">Voltar</a>
+                    <!-- Confirm Button -->
+                    <button type="submit" class="btn btn-primary">Confirmar Rematrícula</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Enable Bootstrap form validation
+        (function () {
+            'use strict';
+            const forms = document.querySelectorAll('.needs-validation');
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+    </script>
 </body>
 </html>

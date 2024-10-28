@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,22 +8,18 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* Container background */
         body {
             background-color: #f8f9fa;
         }
-        /* Card Styling */
         .card {
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        /* Form Section Titles */
         .form-section-title {
             font-weight: bold;
             color: #343a40;
             margin-top: 1.5rem;
         }
-        /* Confirm Button */
         .btn-primary {
             display: flex;
             align-items: center;
@@ -38,7 +34,7 @@
 
     <h3 class="text-center mt-4">Confirmar Rematrícula</h3>
     <p class="text-center text-muted">Confira e confirme as informações para 2025</p>
-    
+
     <div class="container my-5">
         <div class="card mb-4">
             <div class="card-body">
@@ -56,29 +52,39 @@
             <p class="form-section-title">Modalidade de Ensino</p>
             <div class="mb-3">
                 <label for="modalidade" class="form-label">Escolha a modalidade das aulas para 2025</label>
-                <form action="" method="post">
                 <select name="modalidade" id="modalidade" class="form-select" required>
-                    <option value="" disabled hidden>Selecione a Modalidade da Turma</option>
-                    <option value="Presencial">Presencial</option>
-                    <option value="Online">Online</option>
+                    <% if (aluno.curso === 'Maker' || aluno.curso === 'Robótica') { %>
+                        <option value="Presencial">Presencial</option>
+                    <% } else { %>
+                        <option value="Presencial">Presencial</option>
+                        <option value="Online">Online</option>
+                    <% } %>
                 </select>
-                <div class="d-flex justify-content-center mt-2">
-                <button type="submit" class="btn btn-primary">Buscar</button>
-            </div>
-            </form>
             </div>
 
-        
+            <!-- Buttons Section -->
+            <div class="d-flex justify-content-between mt-4">
+                <!-- Back Button -->
+                <button type="button" class="btn btn-secondary" onclick="history.back();">Voltar</button>
+
+                <!-- Confirm Button with Spinner -->
+                <button type="submit" class="btn btn-primary">
+                    <span>Confirmar</span>
+                    <div class="spinner-border spinner-border-sm text-light d-none" role="status"></div>
+                </button>
+            </div>
+        </form>
+    </div>
 
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.querySelector('form').addEventListener('submit', function() {
-            const spinner = document.querySelector('.spinner-border');
-            const button = document.querySelector('.btn-primary');
-            spinner.classList.remove('d-none');  // Show spinner
-            button.disabled = true;              // Disable button to prevent multiple submissions
-        });
+        // document.querySelector('form').addEventListener('submit', function() {
+        //     const spinner = document.querySelector('.spinner-border');
+        //     const button = document.querySelector('.btn-primary');
+        //     spinner.classList.remove('d-none');
+        //     button.disabled = true;
+        // });
     </script>
 </body>
 </html>

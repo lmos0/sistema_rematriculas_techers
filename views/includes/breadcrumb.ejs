@@ -1,0 +1,23 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="/">Home</a>
+        </li>
+        <!-- Dynamically add other breadcrumb items here -->
+        <% if (breadcrumbs) { %>
+            <% breadcrumbs.forEach(function(crumb, index) { %>
+                <% if (index === breadcrumbs.length - 1) { %>
+                    <!-- Current page - no link -->
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <%= crumb.name %>
+                    </li>
+                <% } else { %>
+                    <!-- Intermediate breadcrumb with link -->
+                    <li class="breadcrumb-item">
+                        <a href="<%= crumb.url %>"><%= crumb.name %></a>
+                    </li>
+                <% } %>
+            <% }); %>
+        <% } %>
+    </ol>
+</nav>

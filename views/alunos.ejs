@@ -29,7 +29,7 @@
                         <th>Parcela em 2024</th>
                         <th>Valor Total em 2024</th>
                         <th>Valor para 2025</th>
-                        <th>CPF do Responsável</th>
+                        <!-- <th>CPF do Responsável</th> -->
                         <th>Aceite</th>
                         <th>Data de Confirmação</th>
                         <th>Rematricular</th>
@@ -48,7 +48,7 @@
                                 <td><%= item.valor_2024.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %></td>
                                 <td><%= (item.valor_2024 * item.quantidade_parcelas_2024).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %></td>
                                 <td><%= item.valor_2025.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %></td>
-                                <td><%= item.cpf_responsavel %></td>
+                                
                                 <td><%= item.aceite ? 'Confirmado' : 'Pendente' %></td>
                                 <td><%= item.data_aceite ? new Date(item.data_aceite).toLocaleDateString('pt-BR') : '' %></td>
                                 <td>

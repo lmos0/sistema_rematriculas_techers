@@ -11,7 +11,7 @@ function removeAccents(str) {
 
 async function buscarAluno(req, res) {
     const {nome_aluno} = req.body
-    const nome_aluno_busca = removeAccents(req.body.nome_aluno).toLowerCase()
+    const nome_aluno_busca = removeAccents(req.body.nome_aluno).toLowerCase().trim()
 
     if (!nome_aluno) {
         
@@ -90,6 +90,7 @@ async function confirmarAceite(req, res) {
 
     try {
         const aluno = await Aluno.findByPk(id)
+        const turma = await Turma.findOne({where: {id: aluno.turma_2025}})
 
     if (!aluno) {
         //await transaction.rollback()
