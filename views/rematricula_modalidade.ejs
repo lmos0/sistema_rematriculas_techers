@@ -46,7 +46,7 @@
                 <ul class="list-unstyled">
                     <li><strong>Responsável:</strong> <%= aluno.nome_responsavel %></li>
                     <li><strong>CPF do Responsável:</strong> <%= aluno.cpf_responsavel %></li>
-                    <li><strong>Valor do curso para 2025:</strong> <%= aluno.valor_2025.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %></li>
+                    <li><strong>Valor do curso para 2025:</strong> <%= aluno.valor_2025.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %> (Em até 12x sem juros)</li>
                     <li><strong>Curso Atual:</strong> <%= aluno.curso %></li>
                 </ul>
             </div>
@@ -55,7 +55,7 @@
         <form action="" method="post">
             <p class="form-section-title">Modalidade de Ensino</p>
             <div class="mb-3">
-                <label for="modalidade" class="form-label">Modalidade de Ensino para 2025</label>
+                <label for="modalidade" class="form-label">Escolha a modalidade das aulas para 2025</label>
                 <form action="" method="post">
                 <select name="modalidade" id="modalidade" class="form-select" required>
                     <option value="" disabled hidden>Selecione a Modalidade da Turma</option>

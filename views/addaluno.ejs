@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Aluno</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Include Navbar -->
+    <%- include('includes/navbar') %>
+
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Adicionar Novo Aluno</h1>
+        
+        <form action="" method="POST" class="needs-validation" novalidate>
+            <div class="mb-3">
+                <label for="nome_aluno" class="form-label">Nome do Aluno</label>
+                <input type="text" class="form-control" id="nome_aluno" name="nome_aluno" required>
+                <div class="invalid-feedback">Por favor, insira o nome do aluno.</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="nome_responsavel" class="form-label">Nome do Responsável</label>
+                <input type="text" class="form-control" id="nome_responsavel" name="nome_responsavel" required>
+                <div class="invalid-feedback">Por favor, insira o nome do responsável.</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="cpf_responsavel" class="form-label">CPF do Responsável</label>
+                <input type="text" class="form-control" id="cpf_responsavel" name="cpf_responsavel" required>
+                <div class="invalid-feedback">Por favor, insira o CPF do responsável.</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="curso" class="form-label">Curso</label>
+                <select class="form-select" id="curso" name="curso" required>
+                    <option value="">Selecione um curso</option>
+                    <option value="Programação">Programação</option>
+                    <option value="Robótica">Robótica</option>
+                    <option value="Animação Digital">Animação Digital</option>
+                    <option value="Maker">Maker</option>
+                    <option value="Design Gráfico">Design Gráfico</option>
+                    <option value="Video Making">Video Making</option>
+                </select>
+                <div class="invalid-feedback">Por favor, selecione o curso.</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="level_atual" class="form-label">Nível Atual</label>
+                <input type="number" class="form-control" id="level_atual" name="level_atual" required>
+                <div class="invalid-feedback">Por favor, insira o nível atual.</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="valor_2024" class="form-label">Valor da parcela em 2024 (R$)</label>
+                <input type="number" step="0.01" class="form-control" id="valor_2024" name="valor_2024" required>
+                <div class="invalid-feedback">Por favor, insira o valor da parcela para 2024.</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="quantidade_parcelas_2024" class="form-label">Quantidade de Parcelas 2024</label>
+                <input type="number" step="1" class="form-control" id="valor_2024" name="quantidade_parcelas_2024" required>
+                <div class="invalid-feedback">Por favor, insira a quantidade de parcelnas negociadas em 2024.</div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Adicionar Aluno</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Bootstrap form validation
+        (() => {
+            'use strict'
+            const forms = document.querySelectorAll('.needs-validation')
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
+</body>
+</html>

@@ -6,7 +6,9 @@ const Admin = require('../model/admin')
 const Aluno = require('../model/aluno')
 const Turma = require('../model/turma')
 
-
+function removeAccents(str) {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
 
 async function addAluno(req,res){
     const {nome_aluno,
@@ -14,17 +16,25 @@ async function addAluno(req,res){
          cpf_responsavel, 
          curso, 
          level_atual, 
-         valor_2024} = req.body
+         valor_2024,
+         quantidade_parcelas_2024} = req.body
 
+         nome_aluno_busca = removeAccents(req.body.nome_aluno).toLowerCase()
+
+         
+        
          level_2025 = level_atual + 1
-         valor_2025 = valor_2024 * 1.1
+         valor_2025 = (valor_2024 * 1.04) * quantidade_parcelas_2024
 
         if (!nome_aluno || !nome_responsavel || !cpf_responsavel || !curso || !level_atual || !valor_2024) {
             return res.status(400).json("Todos os campos são obrigatórios");
         }
 try{
-    const rematricula = await Aluno.create({nome_aluno, nome_responsavel, cpf_responsavel, curso, level_atual, valor_2024, level_2025, valor_2025})
-    return res.status(201).json(rematricula)
+    if (req.body.curso !== 'Programação'){
+        level_2025 = 2
+}  
+    const rematricula = await Aluno.create({nome_aluno, nome_aluno_busca, nome_responsavel, cpf_responsavel, curso, level_atual, valor_2024, level_2025, valor_2025, quantidade_parcelas_2024})
+    return res.status(201).redirect('/admin/alunos')
 }
 catch(err){
     console.error('Erro ao adicionar aluno:', err)
@@ -53,7 +63,7 @@ async function addTurma(req,res){
 async function getTurmas(req,res){
     try{
         const turmas = await Turma.findAll()
-        res.status(200).json(turmas)
+        res.render('turmas', {turmas})
     }
     catch(err){
         console.error('Erro ao buscar turmas:', err)
@@ -174,6 +184,10 @@ async function loginAdmin(req,res){
     }
 }
 
+async function renderAddTurma (req,res){
+    res.render('addTurma')
+}
+
 
 module.exports = {
     addAluno,
@@ -185,5 +199,6 @@ module.exports = {
     loginAdmin,
     registerAdmin,
     renderAlunoSelect,
+    renderAddTurma,
     renderMatriculasConcluidas
 }

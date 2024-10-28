@@ -5,9 +5,13 @@ const session = require('express-session')
 const flash = require('connect-flash')
 
 
+function removeAccents(str) {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
 async function buscarAluno(req, res) {
     const {nome_aluno} = req.body
-    
+    const nome_aluno_busca = removeAccents(req.body.nome_aluno).toLowerCase()
 
     if (!nome_aluno) {
         
@@ -17,9 +21,9 @@ async function buscarAluno(req, res) {
 
     try {
        
-        const aluno = await Aluno.findOne({where: {nome_aluno: nome_aluno}})
+        const aluno = await Aluno.findOne({where: {nome_aluno_busca: nome_aluno_busca}})
         if (!aluno) {
-            req.flash('error', 'Aluno não encontrado')
+            req.flash('error', `Aluno ${req.body.nome_aluno} não encontrado. Verifique a grafia e tente novamente`)
             return res.redirect('/')
             
         }
@@ -153,7 +157,7 @@ async function confirmarMensalidadeTurma(req, res) {
     try {
         const aluno = await Aluno.findByPk(id)
         const novoLevel = aluno.level_2025 + 1
-        const valor_2025 = aluno.valor_2024 * 1.04
+        //const valor_2025 = aluno.valor_2024 * 1.04
         const turmas_possiveis = await Turma.findAll({
             where: {
               curso: aluno.curso,
@@ -177,7 +181,7 @@ async function confirmarMensalidadeTurma(req, res) {
             return res.status(400).send("Forma de pagamento inválida");
         }
         // Update the fields
-        aluno.valor_2025 = valor_2025
+        //aluno.valor_2025 = valor_2025
         aluno.turma_2025 = turma_2025
         aluno.quantidade_parcelas = quantidade_parcelas
         aluno.forma_de_pagamento = forma_de_pagamento

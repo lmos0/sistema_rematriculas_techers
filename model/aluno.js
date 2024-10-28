@@ -14,6 +14,11 @@ const Aluno = sequelize.define('Aluno', {
         unique: true
 
     },
+    nome_aluno_busca:{
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
+    },
     nome_responsavel:{
         type: DataTypes.STRING,
         allowNull: false
@@ -37,6 +42,11 @@ const Aluno = sequelize.define('Aluno', {
     valor_2024:{
         type: DataTypes.DECIMAL(10,2),
         allowNull: false
+    },
+    quantidade_parcelas_2024:{
+        type: DataTypes.INTEGER,
+        allowNull: false,
+
     },
     valor_2025:{
         type: DataTypes.DECIMAL(10,2),
