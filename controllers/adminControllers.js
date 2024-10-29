@@ -12,7 +12,8 @@ function removeAccents(str) {
 async function addAluno(req,res){
     const {nome_aluno,
          nome_responsavel, 
-         cpf_responsavel, 
+         cpf_responsavel,
+         data_de_nascimento,
          curso, 
          level_atual, 
          valor_2024,
@@ -22,17 +23,18 @@ async function addAluno(req,res){
 
          
         
-         level_2025 = level_atual + 1
+         level_2025 = Number(level_atual) + 1
          valor_2025 = (valor_2024 * 1.04) * quantidade_parcelas_2024
 
-        if (!nome_aluno || !nome_responsavel || !cpf_responsavel || !curso || !level_atual || !valor_2024) {
+        if (!nome_aluno || !nome_responsavel || !cpf_responsavel || !curso || !level_atual || !valor_2024 || !data_de_nascimento || !quantidade_parcelas_2024){ {
             return res.status(400).json("Todos os campos são obrigatórios");
         }
+    }
 try{
     if (req.body.curso !== 'Programação'){
         level_2025 = 2
 }  
-    const rematricula = await Aluno.create({nome_aluno, nome_aluno_busca, nome_responsavel, cpf_responsavel, curso, level_atual, valor_2024, level_2025, valor_2025, quantidade_parcelas_2024})
+    const rematricula = await Aluno.create({nome_aluno, nome_aluno_busca, nome_responsavel, cpf_responsavel, curso, level_atual, valor_2024, level_2025, valor_2025, quantidade_parcelas_2024, data_de_nascimento})
     return res.status(201).redirect('/admin/alunos')
 }
 catch(err){

@@ -14,6 +14,16 @@ const Aluno = sequelize.define('Aluno', {
         unique: true
 
     },
+    data_de_nascimento:{
+        type: DataTypes.DATE,
+        allowNull: false
+    },
+
+    idade:{
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+
     nome_aluno_busca:{
         type: DataTypes.STRING,
         allowNull: false,
@@ -84,6 +94,22 @@ const Aluno = sequelize.define('Aluno', {
         defaultValue: null
     },
     
-})
+}, {
+
+
+hooks: {
+    beforeValidate: (aluno) => {
+        const today = new Date();
+        const birthDate = new Date(aluno.data_de_nascimento);
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDifference = today.getMonth() - birthDate.getMonth();
+
+        if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+
+        aluno.idade = age;
+    }
+}},)
 
 module.exports = Aluno

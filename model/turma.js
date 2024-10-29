@@ -27,6 +27,10 @@ const Turma = sequelize.define('Turma', {
         type: DataTypes.STRING,
         allowNull: false
     },
+    faixa_etaria:{
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
     horario:{
         type: DataTypes.STRING,
         allowNull: false

@@ -49,16 +49,16 @@
         </div>
 
         <form action="" method="post">
-            <p class="form-section-title">Modalidade de Ensino</p>
+            <h5 class="form-section-title">Modalidade de Ensino</h5>
             <div class="mb-3">
                 <label for="modalidade" class="form-label">Escolha a modalidade das aulas para 2025</label>
                 <select name="modalidade" id="modalidade" class="form-select" required>
-                    <% if (aluno.curso === 'Maker' || aluno.curso === 'Robótica') { %>
-                        <option value="Presencial">Presencial</option>
-                    <% } else { %>
-                        <option value="Presencial">Presencial</option>
-                        <option value="Online">Online</option>
-                    <% } %>
+                     <% if (aluno.curso === 'Maker' || aluno.curso === 'Robótica') { %>
+        <option value="Presencial">Presencial</option>
+    <% } else { %>
+        <option value="Presencial">Presencial</option>
+        <option value="Online">Online</option>
+    <% } %>
                 </select>
             </div>
 

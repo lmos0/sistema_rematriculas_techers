@@ -53,18 +53,18 @@
         </div>
 
         <form action="" method="post" id="rematriculaForm">
-            <p class="form-section-title text-center">Turma para 2025</p>
+            <h5 class="form-section-title text-center">Turma para 2025</h5>
             <div class="mb-3">
                 <label for="turma_2025" class="form-label">Turma</label>
                 <select name="turma_2025" id="turma_2025" class="form-select" required>
                     <option disabled selected>Selecione a Turma</option>
                     <% turmas_possiveis.forEach(function(turma) { %>
-                        <option value="<%= turma.nome %>"><%= turma.curso + ' ' + turma.modalidade + ' ' + turma.dia_semana + ' ' + turma.horario%></option>
+                        <option value="<%= turma.nome %>"><%= turma.curso  + ' - ' + turma.dia_semana + ' - ' + turma.horario%></option>
                     <% }); %>
                 </select>
             </div>
 
-            <p class="form-section-title text-center">Quantidade de Parcelas</p>
+            <h5 class="form-section-title text-center">Quantidade de Parcelas</h5>
             <div class="mb-3">
                 <label for="parcelas" class="form-label">Parcelamento em até 12x</label>
                 <select class="form-select" name="quantidade_parcelas" id="parcelas" required>
@@ -75,7 +75,7 @@
                 </select>
             </div>
 
-            <p class="form-section-title text-center">Forma de Pagamento</p>
+            <h5 class="form-section-title text-center">Forma de Pagamento</h5>
             <div class="mb-3">
                 <label for="forma_de_pagamento" class="form-label">Forma de Pagamento</label>
                 <select name="forma_de_pagamento" id="forma_de_pagamento" class="form-select" required>

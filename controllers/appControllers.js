@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const Aluno = require('../model/aluno')
 const Turma = require('../model/turma')
 
@@ -137,10 +138,14 @@ async function renderConfirmarMensalidadeTurma(req, res) {
         where: {
           curso: cursoDoAluno,
           level: levelDoAluno,
-           modalidade: modalidadeDoAluno
+          [Op.or]: [
+            { modalidade: modalidadeDoAluno },
+            { modalidade: 'Híbrida' }
+        ]
           
         }
       })
+     
       return res.render('rematricula_turma', {aluno, turmas_possiveis})
     }
     catch(err){
