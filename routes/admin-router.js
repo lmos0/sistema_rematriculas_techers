@@ -1,10 +1,11 @@
 const express = require('express')
 const router = express.Router()
 
-const {addAluno, addTurma, deleteTurma, getAlunos, getTurmas, renderAddTurma} = require('../controllers/adminControllers')
+const {addAluno, addTurma, deleteTurma, getAlunos, getTurmas, renderAddTurma, loginAdmin,registerAdmin} = require('../controllers/adminControllers')
 
 
 router.get('/', (req, res) => res.render('login'))
+router.post('/', loginAdmin)
 
 router.get('/turmas', getTurmas)
 
@@ -15,6 +16,8 @@ router.delete('/turmas/:id', deleteTurma)
 router.get('/alunos', getAlunos)
 router.get('/alunos/adicionar', (req, res) => res.render('addaluno'))
 router.post('/alunos/adicionar', addAluno)
+
+router.post('/registrar', registerAdmin )
 
 
 

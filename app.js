@@ -16,7 +16,8 @@ const app = express()
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    time: 600000
 }));
 
 app.use(flash())

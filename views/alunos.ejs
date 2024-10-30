@@ -52,7 +52,7 @@
                                 <td><%= item.aceite ? 'Confirmado' : 'Pendente' %></td>
                                 <td><%= item.data_aceite ? new Date(item.data_aceite).toLocaleDateString('pt-BR') : '' %></td>
                                 <td>
-                                    <% if (item.aceite === 0) { %>
+                                    <% if (!item.aceite) { %>
                                       <form action="/rematricula/<%= item.id %>">
                                         <button type="submit" class="btn btn-primary btn-sm">Rematricular</button>
                                       </form>

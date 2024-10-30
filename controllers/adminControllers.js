@@ -1,5 +1,7 @@
 const bcrypt = require('bcrypt')
 
+const session = require('express-session');
+
 //const Rematricula = require('../model/rematricula')
 const Admin = require('../model/admin')
 const Aluno = require('../model/aluno')
@@ -167,7 +169,7 @@ async function growTechers(req,res){
 
 async function registerAdmin (req,res){
     const {email, password} = req.body
-    bcrypt
+    
     try{
         const admin = await Admin.create({email, password})
         res.status(201).json(admin)
@@ -184,7 +186,9 @@ async function loginAdmin(req,res){
         if(!admin){
             return res.status(404).send("Admin não encontrado")
         }
+        req.session.admin = admin
         res.status(200).json(admin)
+        
     }
     catch(err){
         res.status(400).json({error: err.message})
