@@ -19,12 +19,12 @@ async function addAluno(req,res){
          valor_2024,
          quantidade_parcelas_2024} = req.body
 
-         nome_aluno_busca = removeAccents(req.body.nome_aluno).toLowerCase()
+         const nome_aluno_busca = removeAccents(req.body.nome_aluno).toLowerCase()
 
          
         
-         level_2025 = Number(level_atual) + 1
-         valor_2025 = (valor_2024 * 1.04) * quantidade_parcelas_2024
+         let level_2025 = Number(level_atual) + 1
+         let valor_2025 = (valor_2024 * 1.04) * quantidade_parcelas_2024
 
         if (!nome_aluno || !nome_responsavel || !cpf_responsavel || !curso || !level_atual || !valor_2024 || !data_de_nascimento || !quantidade_parcelas_2024){ {
             return res.status(400).json("Todos os campos são obrigatórios");
@@ -32,7 +32,7 @@ async function addAluno(req,res){
     }
 try{
     if (req.body.curso !== 'Programação'){
-        level_2025 = 2
+        let level_2025 = 2
 }  
     const rematricula = await Aluno.create({nome_aluno, nome_aluno_busca, nome_responsavel, cpf_responsavel, curso, level_atual, valor_2024, level_2025, valor_2025, quantidade_parcelas_2024, data_de_nascimento})
     return res.status(201).redirect('/admin/alunos')
@@ -45,13 +45,13 @@ catch(err){
 }
 
 async function addTurma(req,res){
-    const {nome, curso, level, modalidade, dia_semana, horario, vagas} = req.body
+    const {nome, curso, level, modalidade, dia_semana, horario, vagas, faixa_etaria} = req.body
 
     if(!nome || !curso || !level || !modalidade || !dia_semana || !horario || !vagas){
         return res.status(400).json("Todos os campos são obrigatórios")
     }
     try{
-        const turma = await Turma.create({nome, curso, level, modalidade, dia_semana, horario, vagas})
+        const turma = await Turma.create({nome, curso, level, modalidade, dia_semana, horario, vagas, faixa_etaria})
         return res.status(201).redirect('/admin/turmas')
     }
     catch(err){

@@ -52,11 +52,15 @@ async function getRematricular(req,res){
 
     const cursoDoAluno = aluno.curso
     const levelDoAluno = aluno.level_2025
+        const idadeDoAluno = aluno.idade
     
     const turmas_possiveis = await Turma.findAll({
         where: {
           curso: cursoDoAluno,
           level: levelDoAluno,
+            faixa_etaria : {
+              [Op.between]: [idadeDoAluno -2, idadeDoAluno +2]
+            }
           
         }
       })
@@ -153,7 +157,6 @@ async function renderConfirmarMensalidadeTurma(req, res) {
         return res.status(500).json({error: err.message})
     }
 
-    ;
 }
 
 async function confirmarMensalidadeTurma(req, res) {
