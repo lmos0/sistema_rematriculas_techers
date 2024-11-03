@@ -63,12 +63,12 @@
                                     <% } %>
                                 </td>
                                 <td>
-                                    <form action="/admin/editar/<%= item.id %>" method="get">
+                                    <form action="/admin/alunos/editar/<%= item.id %>" method="get">
                                         <button type="submit" class="btn btn-warning btn-sm">Editar</button>
                                     </form>
                                 </td>
                                 <td>
-                                    <form action="/admin/excluir/<%= item.id %>" method="post" onsubmit="return confirm('Tem certeza que deseja excluir este aluno?');">
+                                    <form action="/admin/alunos/excluir/<%= item.id %>" method="post" onsubmit="return confirm('Tem certeza que deseja excluir este aluno?');">
                                         <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
                                     </form>
                                 </td>

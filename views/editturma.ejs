@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="icon-red.svg" type="image/svg+xml">
+    <title>Editar Turma</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Include Navbar -->
+    <%- include('includes/navbar') %>
+
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-sm p-4">
+                    <h2 class="card-title text-center mb-4">Editar Turma</h2>
+                    <form action="/admin/turmas/editar/<%= turma.id %>" method="POST">
+                        <div class="mb-3">
+                            <label for="nome" class="form-label">Nome da Turma</label>
+                            <input type="text" class="form-control" name="nome" id="nome" value="<%= turma.nome %>" required>
+                            <small class="form-text text-muted">Atual: <%= turma.nome %></small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="curso" class="form-label">Curso</label>
+                            <select name="curso" id="curso" class="form-select" required>
+                                <option value="Programação" <%= turma.curso === 'Programação' ? 'selected' : '' %>>Programação</option>
+                                <option value="Robótica" <%= turma.curso === 'Robótica' ? 'selected' : '' %>>Robótica</option>
+                                <option value="Animação Digital" <%= turma.curso === 'Animação Digital' ? 'selected' : '' %>>Animação Digital</option>
+                                <option value="Maker" <%= turma.curso === 'Maker' ? 'selected' : '' %>>Maker</option>
+                                <option value="Design Gráfico" <%= turma.curso === 'Design Gráfico' ? 'selected' : '' %>>Design Gráfico</option>
+                                <option value="Video Making" <%= turma.curso === 'Video Making' ? 'selected' : '' %>>Video Making</option>
+                            </select>
+                            <small class="form-text text-muted">Atual: <%= turma.curso %></small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="level" class="form-label">Level</label>
+                            <input type="number" class="form-control" name="level" id="level" value="<%= turma.level %>" required min="1" max="8">
+                            <small class="form-text text-muted">Atual: <%= turma.level %></small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="faixa_etaria" class="form-label">Faixa Etária</label>
+                            <select name="faixa_etaria" id="faixa_etaria" class="form-select" required>
+                                <option value="kids" <%= turma.faixa_etaria === 'kids' ? 'selected' : '' %>>Kids (6 - 8 anos)</option>
+                                <option value="jr1" <%= turma.faixa_etaria === 'jr1' ? 'selected' : '' %>>JR1 (8 - 10 anos)</option>
+                                <option value="jr2" <%= turma.faixa_etaria === 'jr2' ? 'selected' : '' %>>JR2 (10 - 12 anos)</option>
+                                <option value="teens" <%= turma.faixa_etaria === 'teens' ? 'selected' : '' %>>Teens (13 - 17 anos)</option>
+                                <option value="adulto" <%= turma.faixa_etaria === 'adulto' ? 'selected' : '' %>>Adulto (18+ anos)</option>
+                            </select>
+                            <small class="form-text text-muted">Atual: <%= turma.faixa_etaria %></small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="modalidade" class="form-label">Modalidade</label>
+                            <select name="modalidade" id="modalidade" class="form-select" required>
+                                <option value="Presencial" <%= turma.modalidade === 'Presencial' ? 'selected' : '' %>>Presencial</option>
+                                <option value="Online" <%= turma.modalidade === 'Online' ? 'selected' : '' %>>Online</option>
+                                <option value="Híbrida" <%= turma.modalidade === 'Híbrida' ? 'selected' : '' %>>Híbrida</option>
+                            </select>
+                            <small class="form-text text-muted">Atual: <%= turma.modalidade %></small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="dia_semana" class="form-label">Dia da Semana</label>
+                            <select class="form-select" name="dia_semana" id="dia_semana" required>
+                                <option value="Terça-feira" <%= turma.dia_semana === 'Terça-feira' ? 'selected' : '' %>>Terça-feira</option>
+                                <option value="Quarta-feira" <%= turma.dia_semana === 'Quarta-feira' ? 'selected' : '' %>>Quarta-feira</option>
+                                <option value="Quinta-feira" <%= turma.dia_semana === 'Quinta-feira' ? 'selected' : '' %>>Quinta-feira</option>
+                                <option value="Sexta-feira" <%= turma.dia_semana === 'Sexta-feira' ? 'selected' : '' %>>Sexta-feira</option>
+                                <option value="Sábado" <%= turma.dia_semana === 'Sábado' ? 'selected' : '' %>>Sábado</option>
+                            </select>
+                            <small class="form-text text-muted">Atual: <%= turma.dia_semana %></small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="horario" class="form-label">Horário</label>
+                            <input type="time" class="form-control" name="horario" id="horario" value="<%= turma.horario %>" required>
+                            <small class="form-text text-muted">Atual: <%= turma.horario %></small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="vagas" class="form-label">Vagas Disponíveis</label>
+                            <input type="number" class="form-control" name="vagas" id="vagas" value="<%= turma.vagas %>" min="1" required>
+                            <small class="form-text text-muted">Atual: <%= turma.vagas %></small>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

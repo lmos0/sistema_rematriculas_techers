@@ -15,7 +15,7 @@
     <div class="container my-5">
         <h1 class="text-center mb-4">Editar Aluno</h1>
         
-        <form action="/alunos/editar/<%= aluno.id %>" method="POST" class="needs-validation" novalidate>
+        <form action="/admin/alunos/editar/<%= aluno.id %>" method="POST" class="needs-validation" novalidate>
             <div class="mb-3">
                 <label for="nome_aluno" class="form-label">Nome do Aluno</label>
                 <input type="text" class="form-control" id="nome_aluno" name="nome_aluno" value="<%= aluno.nome_aluno %>" required>
@@ -96,19 +96,19 @@
 
     <script>
         // Bootstrap form validation
-        (() => {
-            'use strict'
-            const forms = document.querySelectorAll('.needs-validation')
-            Array.from(forms).forEach(form => {
-                form.addEventListener('submit', event => {
-                    if (!form.checkValidity()) {
-                        event.preventDefault()
-                        event.stopPropagation()
-                    }
-                    form.classList.add('was-validated')
-                }, false)
-            })
-        })()
+        // (() => {
+        //     'use strict'
+        //     const forms = document.querySelectorAll('.needs-validation')
+        //     Array.from(forms).forEach(form => {
+        //         form.addEventListener('submit', event => {
+        //             if (!form.checkValidity()) {
+        //                 event.preventDefault()
+        //                 event.stopPropagation()
+        //             }
+        //             form.classList.add('was-validated')
+        //         }, false)
+        //     })
+        // })()
     </script>
 </body>
 </html>

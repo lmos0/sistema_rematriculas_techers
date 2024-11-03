@@ -122,6 +122,103 @@ async function renderEditAluno(req,res){
         return res.status(500).json({error: err.message})
     }
 }
+
+async function renderEditTurma(req,res){
+    const id = req.params.id
+    try{
+        const turma = await Turma.findByPk(id)
+        if(!turma){
+            return res.status(404).json("Turma não encontrada")
+        }
+        return res.status(200).render('editturma', {turma})
+    }
+    catch(err){
+        console.error('Erro ao buscar turma:', err)
+        return res.status(500).json({error: err.message})
+    }
+}
+
+async function postEditTurma(req,res){
+    const id = req.params.id
+    const {nome, curso, level, modalidade, dia_semana, horario, vagas, faixa_etaria} = req.body
+    try{
+        const turma = await Turma.findByPk(id)
+        if(!turma){
+            return res.status(404).json("Turma não encontrada")
+        }
+        turma.nome = nome
+        turma.curso = curso
+        turma.level = level
+        turma.modalidade = modalidade
+        turma.dia_semana = dia_semana
+        turma.horario = horario
+        turma.vagas = vagas
+        turma.faixa_etaria = faixa_etaria
+        await turma.save()
+        return res.status(200).json(turma)
+    }
+    catch(err){
+        console.error('Erro ao editar turma:', err)
+        return res.status(500).json({error: err.message})
+    }
+}
+
+async function postEditAluno(req, res) {
+    const {
+        nome_aluno,
+        nome_responsavel,
+        cpf_responsavel,
+        data_de_nascimento,
+        curso,
+        level_atual,
+        valor_2024,
+        quantidade_parcelas_2024,
+        reajuste,
+        segundo_curso
+    } = req.body;
+
+    const nome_aluno_busca = removeAccents(req.body.nome_aluno).toLowerCase();
+    const taxa_reajuste = (Number(req.body.reajuste) / 100) + 1;
+    const level_2025 = curso !== 'Programação' ? 2 : Number(level_atual) + 1;
+    const valor_2025 = (valor_2024 * taxa_reajuste) * quantidade_parcelas_2024;
+
+    if (!nome_aluno || !nome_responsavel || !cpf_responsavel || !curso || !level_atual || !valor_2024 || !data_de_nascimento || !quantidade_parcelas_2024) {
+        return res.status(400).json("Todos os campos são obrigatórios");
+    }
+
+    try {
+        // Find the existing student by a unique identifier (e.g., cpf_responsavel)
+        const alunoExistente = await Aluno.findOne({ cpf_responsavel });
+
+        if (!alunoExistente) {
+            return res.status(404).json({ error: 'Aluno não encontrado' });
+        }
+
+        // Update the existing record
+        alunoExistente.nome_aluno = nome_aluno;
+        alunoExistente.nome_aluno_busca = nome_aluno_busca;
+        alunoExistente.nome_responsavel = nome_responsavel;
+        alunoExistente.curso = curso;
+        alunoExistente.level_atual = level_atual;
+        alunoExistente.valor_2024 = valor_2024;
+        alunoExistente.level_2025 = level_2025;
+        alunoExistente.valor_2025 = valor_2025;
+        alunoExistente.quantidade_parcelas_2024 = quantidade_parcelas_2024;
+        alunoExistente.data_de_nascimento = data_de_nascimento;
+        alunoExistente.taxa_reajuste = reajuste;
+        alunoExistente.segundo_curso = segundo_curso;
+
+        // Save the updated record
+        await alunoExistente.save();
+
+        console.log('Aluno Updated:', alunoExistente);
+        return res.status(200).redirect('/admin/alunos');
+    } catch (err) {
+        console.error('Erro ao editar aluno:', err);
+        return res.status(500).json({ error: err.message });
+    }
+}
+
     
 
 async function getTurmas(req,res){
@@ -240,7 +337,7 @@ async function loginAdmin(req,res){
             return res.status(404).send("Admin não encontrado")
         }
         req.session.admin = admin
-        res.status(200).json(admin)
+        res.status(200).redirect('/admin/alunos')
         
     }
     catch(err){
@@ -263,8 +360,11 @@ module.exports = {
     getTurmas,
     growTechers,
     loginAdmin,
+    postEditTurma,
+    postEditAluno,
     registerAdmin,
     renderAddTurma,
     renderEditAluno,
-    renderMatriculasConcluidas
+    renderMatriculasConcluidas,
+    renderEditTurma
 }
