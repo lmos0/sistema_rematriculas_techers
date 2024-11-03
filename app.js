@@ -20,7 +20,9 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    time: 600000
+    cookie: {
+        maxAge: 600000 // 10 minutes in milliseconds
+    }
 }));
 
 app.use(flash())
