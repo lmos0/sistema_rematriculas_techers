@@ -19,24 +19,37 @@ async function addAluno(req,res){
          curso, 
          level_atual, 
          valor_2024,
-         quantidade_parcelas_2024} = req.body
+         quantidade_parcelas_2024,
+         reajuste,
+        segundo_curso} = req.body
 
          const nome_aluno_busca = removeAccents(req.body.nome_aluno).toLowerCase()
 
-         
+         const taxa_reajuste = (Number(req.body.reajuste) / 100) + 1
+         Number(taxa_reajuste)
         
          let level_2025 = Number(level_atual) + 1
-         let valor_2025 = (valor_2024 * 1.04) * quantidade_parcelas_2024
+         let valor_2025 = (valor_2024 * taxa_reajuste) * quantidade_parcelas_2024
+         
 
         if (!nome_aluno || !nome_responsavel || !cpf_responsavel || !curso || !level_atual || !valor_2024 || !data_de_nascimento || !quantidade_parcelas_2024){ {
             return res.status(400).json("Todos os campos são obrigatórios");
         }
     }
+
 try{
+
     if (req.body.curso !== 'Programação'){
-        let level_2025 = 2
+        level_2025 = 2
+        
 }  
-    const rematricula = await Aluno.create({nome_aluno, nome_aluno_busca, nome_responsavel, cpf_responsavel, curso, level_atual, valor_2024, level_2025, valor_2025, quantidade_parcelas_2024, data_de_nascimento})
+    if (req.body.segundo_curso !== 'Programação'){
+        level_2025_segundo_curso = 2
+    }
+
+    const rematricula = await Aluno.create({nome_aluno, nome_aluno_busca, nome_responsavel, cpf_responsavel, curso, level_atual, valor_2024, level_2025, valor_2025, quantidade_parcelas_2024, data_de_nascimento, taxa_reajuste:reajuste, segundo_curso})
+    
+    console.log('Aluno Created:', rematricula);
     return res.status(201).redirect('/admin/alunos')
 }
 catch(err){
@@ -49,7 +62,7 @@ catch(err){
 async function addTurma(req,res){
     const {nome, curso, level, modalidade, dia_semana, horario, vagas, faixa_etaria} = req.body
 
-    if(!nome || !curso || !level || !modalidade || !dia_semana || !horario || !vagas){
+    if(!nome || !curso || !level || !modalidade || !dia_semana || !horario || !vagas || !faixa_etaria){
         return res.status(400).json("Todos os campos são obrigatórios")
     }
     try{
@@ -79,8 +92,37 @@ async function deleteTurma(req,res){
     }
 }
 
+async function deleteAlunos(req,res){
+    const id = req.params.id
+    try{
+        const aluno = await Aluno.findByPk(id)
+        if(!aluno){
+            return res.status(404).json("Aluno não encontrado")
+        }
+        await aluno.destroy()
+        return res.status(200).json("Aluno deletado com sucesso")
+    }
+    catch(err){
+        console.error('Erro ao deletar aluno:', err)
+        return res.status(500).json({error: err.message})
+    }
+}
 
-
+async function renderEditAluno(req,res){
+    const id = req.params.id
+    try{
+        const aluno = await Aluno.findByPk(id)
+        if(!aluno){
+            return res.status(404).json("Aluno não encontrado")
+        }
+        return res.status(200).render('editaluno', {aluno})
+    }
+    catch(err){
+        console.error('Erro ao buscar aluno:', err)
+        return res.status(500).json({error: err.message})
+    }
+}
+    
 
 async function getTurmas(req,res){
     try{
@@ -125,6 +167,7 @@ async function getRematriculaById(req, res) {
     const id = req.params.id;
     const rematricula = await Aluno.findByPk(id);
     const turma = await Turma.findOne({where: {curso: rematricula.curso, level: rematricula.level_2025}})
+    const turmaSegundoCurso = await Turma.findOne({where: {curso: rematricula.segundo_curso}})
 
     if (!rematricula) {
         return res.status(404).send("Rematrícula não encontrada");
@@ -139,7 +182,7 @@ try{
         return res.status(208).render('aceiteconfirmado', { rematricula });
     }
 
-    res.render('aceite', { rematricula, turma });
+    res.render('aceite', { rematricula, turma, turmaSegundoCurso });
 }
 catch(err){
     console.error('Erro ao buscar rematrícula:', err)
@@ -153,7 +196,17 @@ async function renderMatriculasConcluidas(req,res){
             aceite: true
         }
     })
-    res.render('concluidos', {rematriculas})
+    const turmas = await Turma.findAll()
+
+    const turmaMap = {}
+    turmas.forEach(turma => {
+        turmaMap[turma.id] = turma.nome;
+    });
+    rematriculas.forEach(aluno => {
+        aluno.turmaNome = turmaMap[aluno.turma_2025] || 'Turma não encontrada';
+    });
+
+    res.render('concluidos', {rematriculas, turmas})
 }
 
 async function growTechers(req,res){
@@ -204,6 +257,7 @@ module.exports = {
     addAluno,
     addTurma,
     deleteTurma,
+    deleteAlunos,
     getRematriculaById,
     getAlunos,
     getTurmas,
@@ -211,5 +265,6 @@ module.exports = {
     loginAdmin,
     registerAdmin,
     renderAddTurma,
+    renderEditAluno,
     renderMatriculasConcluidas
 }

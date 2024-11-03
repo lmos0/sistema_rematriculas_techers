@@ -20,11 +20,22 @@
             <p class="lead text-center">
                 <strong><%= rematricula.nome_responsavel %></strong> confirma a rematrícula do(a) aluno(a) <strong><%= rematricula.nome_aluno %></strong> para a turma de 
                 <strong><%= rematricula.curso %></strong>, que ocorrerá às <strong><%= turma.horario %></strong> de <strong><%= turma.dia_semana %></strong>, no ano de 2025.
-                <br> O pagamento será feito em <strong><%= rematricula.quantidade_parcelas %> parcela(s)</strong> de 
+                <br>
+                
+                
+                <% if (rematricula.segundo_curso && turmaSegundoCurso) { %>
+                    <br>
+                    Além disso, a matrícula inclui o segundo curso de <strong><%= rematricula.segundo_curso %></strong>, que ocorrerá às 
+                    <strong><%= turmaSegundoCurso.horario %></strong> de <strong><%= turmaSegundoCurso.dia_semana %></strong><br>.
+                <% } %>
+                
+                <br>O pagamento será feito em <strong><%= rematricula.quantidade_parcelas %> parcela(s)</strong> de 
                 <strong><%= (rematricula.valor_2025 / rematricula.quantidade_parcelas).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong>, 
-                com a forma de pagamento escolhida: <strong><%= rematricula.forma_de_pagamento %></strong>. 
+                com a forma de pagamento escolhida: <strong><%= rematricula.forma_de_pagamento %></strong>.
                 <br>
                 Valor total: <strong><%= rematricula.valor_2025.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong>.
+            
+              
             </p>
             
             <form action="/rematricula/<%= rematricula.id %>/aceite" method="POST" class="text-center needs-validation" novalidate>

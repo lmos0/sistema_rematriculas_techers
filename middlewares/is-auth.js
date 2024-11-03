@@ -1,4 +1,3 @@
-const session = require('express-session');
 
 function isAuth(req, res, next) {
     if (!req.session.admin) {

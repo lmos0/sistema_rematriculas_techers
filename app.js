@@ -1,5 +1,6 @@
 
 require('dotenv').config()
+const methodOverride = require('method-override')
 const express = require('express')
 
 const session = require('express-session');
@@ -13,6 +14,8 @@ const adminRouter = require = require('./routes/admin-router')
 
 const app = express()
 
+
+
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -23,6 +26,8 @@ app.use(session({
 app.use(flash())
 
 app.set('view engine', 'ejs')
+
+app.use(methodOverride('_method'))
 
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({extended: false}))

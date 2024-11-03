@@ -52,29 +52,53 @@ async function getRematricular(req,res){
 
     const cursoDoAluno = aluno.curso
     const levelDoAluno = aluno.level_2025
-        const idadeDoAluno = aluno.idade
-    
+    const segundoCursoDoAluno = aluno.segundo_curso
+    let idadeDoAluno
+
+    switch (true) {
+        case (aluno.idade < 8):
+            idadeDoAluno = "kids";
+            break;
+        case (aluno.idade >= 8 && aluno.idade <= 10):
+            idadeDoAluno = "jr1";
+            break;
+        case (aluno.idade > 10 && aluno.idade <= 12):
+            idadeDoAluno = "jr2";
+            break;
+        case (aluno.idade > 12 && aluno.idade <= 17):
+            idadeDoAluno = "teens";
+            break;
+        case (aluno.idade > 17):
+            idadeDoAluno = "adulto";
+            break;
+        default:
+            idadeDoAluno = null;
+    }
     const turmas_possiveis = await Turma.findAll({
         where: {
           curso: cursoDoAluno,
           level: levelDoAluno,
-            faixa_etaria : {
-              [Op.between]: [idadeDoAluno -2, idadeDoAluno +2]
-            }
-          
+          faixa_etaria: idadeDoAluno
         }
       })
 
-    
-    //   console.log('testando', aluno.curso, aluno.level_2025)
-    //   console.log('turmas possíveis', turmas_possiveis)
-    //   console.log('aluno.curso', aluno.curso)
+      const turmas_possiveis_segundo_curso = await Turma.findAll({
+        where: {
+            curso: segundoCursoDoAluno,
+            level: 2,
+            faixa_etaria: idadeDoAluno
+        }
+    })
+
+     console.log('testando', aluno.curso, aluno.level_2025)
+     console.log('turmas possíveis', turmas_possiveis)
+     console.log('aluno.curso', aluno.curso)
 
     if(!aluno){
         return res.status(404).send("Rematrícula não encontrada")
     }
     await aluno.save()
-    return res.render('rematricula_modalidade', {aluno , turmas_possiveis})
+    return res.render('rematricula_modalidade', {aluno , turmas_possiveis, turmas_possiveis_segundo_curso})
 }
 catch(err){
     console.error('Erro ao buscar rematrícula:', err)
@@ -86,6 +110,11 @@ async function confirmarAceite(req, res) {
     const id = req.params.id;
     const {cpf_responsavel} = req.body
     const aluno = await Aluno.findByPk(id)
+    const turma_2025 = req.session.turma_2025
+    const turma_segundo_curso = req.session.turma_2025_segundo_curso
+    const turma = await Turma.findOne({where: {id: turma_2025}})
+    const turma_segundo = await Turma.findOne({where: {id: turma_segundo_curso}})
+   
 
     if (!id || !cpf_responsavel) {
         return res.status(400).send("ID e CPF do responsável são obrigatórios")
@@ -95,7 +124,7 @@ async function confirmarAceite(req, res) {
 
     try {
         const aluno = await Aluno.findByPk(id)
-        const turma = await Turma.findOne({where: {id: aluno.turma_2025}})
+
 
     if (!aluno) {
         //await transaction.rollback()
@@ -106,11 +135,20 @@ async function confirmarAceite(req, res) {
        // await transaction.rollback()
         return res.status(400).json({error: "CPF do responsável não confere"})
     }
-
+    // const turma = await Turma.findOne({ where: { id: aluno.turma_2025 } });
+    //     if (!turma) {
+    //         return res.status(404).json({ error: "Turma não encontrada" });
+    //     }
+    
     
     aluno.aceite = true
+    turma.vagas = turma.vagas - 1
+    turma_segundo.vagas = turma_segundo.vagas - 1
     aluno.data_aceite = new Date()
+   
+
     await aluno.save()
+    await turma.save()
    // await transaction.commit()
     console.log(`Rematrícula ${id} confirmada com sucesso`)
 
@@ -137,6 +175,30 @@ async function renderConfirmarMensalidadeTurma(req, res) {
     const cursoDoAluno = aluno.curso
     const levelDoAluno = aluno.level_2025
     const modalidadeDoAluno = aluno.modalidade
+    const segundoCursoDoAluno = aluno.segundo_curso
+    const modalidadeDoAlunoSegundoCurso = aluno.modalidade_segundo_curso
+
+    let idadeDoAluno
+
+    switch (true) {
+        case (aluno.idade < 8):
+            idadeDoAluno = "kids";
+            break;
+        case (aluno.idade >= 8 && aluno.idade <= 10):
+            idadeDoAluno = "jr1";
+            break;
+        case (aluno.idade > 10 && aluno.idade <= 12):
+            idadeDoAluno = "jr2";
+            break;
+        case (aluno.idade > 12 && aluno.idade <= 17):
+            idadeDoAluno = "teens";
+            break;
+        case (aluno.idade > 17):
+            idadeDoAluno = "adulto";
+            break;
+        default:
+            idadeDoAluno = null;
+    }
     
     const turmas_possiveis = await Turma.findAll({
         where: {
@@ -145,12 +207,26 @@ async function renderConfirmarMensalidadeTurma(req, res) {
           [Op.or]: [
             { modalidade: modalidadeDoAluno },
             { modalidade: 'Híbrida' }
-        ]
+        ],
+            faixa_etaria: idadeDoAluno
           
         }
       })
-     
-      return res.render('rematricula_turma', {aluno, turmas_possiveis})
+
+      turmas_possiveis_segundo_curso = await Turma.findAll({
+        where: {
+            curso: segundoCursoDoAluno,
+            level: 2,
+            [Op.or]: [
+                { modalidade: modalidadeDoAlunoSegundoCurso },
+                { modalidade: 'Híbrida' }
+            ],
+            faixa_etaria: idadeDoAluno
+        }
+    })
+    console.log(turmas_possiveis)
+     console.log(turmas_possiveis_segundo_curso)
+      return res.render('rematricula_turma', {aluno, turmas_possiveis, turmas_possiveis_segundo_curso})
     }
     catch(err){
         console.error('Erro ao buscar rematrícula:', err)
@@ -161,19 +237,26 @@ async function renderConfirmarMensalidadeTurma(req, res) {
 
 async function confirmarMensalidadeTurma(req, res) {
     const id = req.params.id;
-    const {turma_2025, quantidade_parcelas, forma_de_pagamento } = req.body;
+    const {turma_2025, quantidade_parcelas, forma_de_pagamento, turma_2025_segundo_curso } = req.body;
+    
 
     try {
         const aluno = await Aluno.findByPk(id)
         const novoLevel = aluno.level_2025 + 1
-        //const valor_2025 = aluno.valor_2024 * 1.04
-        const turmas_possiveis = await Turma.findAll({
-            where: {
-              curso: aluno.curso,
-              level: novoLevel,
+        // const turmas_possiveis = await Turma.findAll({
+        //     where: {
+        //       curso: aluno.curso,
+        //       level: novoLevel,
              
-            }
-          });
+        //     }
+        //   });
+        //   const turmas_possiveis_segundo_curso = await Turma.findAll({
+        //     where: {
+        //         curso: aluno.segundo_curso,
+        //         level: 2,
+        //         faixa_etaria: idadeDoAluno
+        //     }
+        // })
 
         if (!aluno) {
             return res.status(404).send("Rematrícula não encontrada");
@@ -192,12 +275,18 @@ async function confirmarMensalidadeTurma(req, res) {
         // Update the fields
         //aluno.valor_2025 = valor_2025
         aluno.turma_2025 = turma_2025
+        aluno.turma_2025_segundo_curso = turma_2025_segundo_curso
         aluno.quantidade_parcelas = quantidade_parcelas
         aluno.forma_de_pagamento = forma_de_pagamento
+
         
        
        
-        await aluno.save();
+        await aluno.save()
+
+        req.session.turma_2025 = turma_2025
+        req.session.turma_2025_segundo_curso = turma_2025_segundo_curso
+        console.log(req.session.turma_2025);
 
         // Redirect to success page
         res.redirect(`/rematricula/${id}/aceite`);
@@ -210,6 +299,7 @@ async function confirmarMensalidadeTurma(req, res) {
 async function rematriculaSelectModalidade(req,res){
     const {id} = req.params
     const modalidade_2025 = req.body.modalidade
+    const modalidade_segundo_curso = req.body.modalidade_segundo_curso
 
     if(!id){
         return res.status(400).json({error: "ID não informado"})
@@ -219,12 +309,15 @@ async function rematriculaSelectModalidade(req,res){
     const aluno = await Aluno.findByPk(id)
 
     aluno.modalidade = modalidade_2025
+    aluno.modalidade_segundo_curso = modalidade_segundo_curso
 
     if(!aluno){
         return res.status(404).send("Rematrícula não encontrada")
     }
     await aluno.save()
     console.log(aluno.modalidade)
+    console.log(aluno.modalidade_segundo_curso)
+    console.log(req.body)
     return res.redirect(`/rematricula/${id}/turma`)
 }
 catch(err){

@@ -23,49 +23,60 @@
                 <thead class="table-dark">
                     <tr>
                         <th>Aluno(a)</th>
-                        <th>Curso</th>
+                        <th>Cursos</th>
                         <th>Level</th>
+                        <th>Idade</th>
                         <th>Responsável</th>
                         <th>Parcela em 2024</th>
                         <th>Valor Total em 2024</th>
+                        <th>Taxa de Reajuste</th>
                         <th>Valor para 2025</th>
-                        <!-- <th>CPF do Responsável</th> -->
                         <th>Aceite</th>
                         <th>Data de Confirmação</th>
                         <th>Rematricular</th>
-                        <!-- <th>Link de Aceite</th> -->
+                        <th>Editar</th>
+                        <th>Excluir</th>
                     </tr>
                 </thead>
                 <tbody>
                     <% if (alunos.length > 0) { %>
                         <% alunos.forEach(function(item) { %>
                             <tr>
-                                <label hidden><%= item.id %></label>
                                 <td><%= item.nome_aluno %></td>
-                                <td><%= item.curso %></td>
+                                <td><%= item.curso %> <%= item.segundo_curso %></td>
                                 <td><%= item.level_atual %></td>
+                                <td><%= item.idade %></td>
                                 <td><%= item.nome_responsavel %></td>
                                 <td><%= item.valor_2024.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %></td>
                                 <td><%= (item.valor_2024 * item.quantidade_parcelas_2024).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %></td>
+                                <td><%= item.taxa_reajuste %>%</td>
                                 <td><%= item.valor_2025.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %></td>
-                                
                                 <td><%= item.aceite ? 'Confirmado' : 'Pendente' %></td>
                                 <td><%= item.data_aceite ? new Date(item.data_aceite).toLocaleDateString('pt-BR') : '' %></td>
                                 <td>
                                     <% if (!item.aceite) { %>
-                                      <form action="/rematricula/<%= item.id %>">
-                                        <button type="submit" class="btn btn-primary btn-sm">Rematricular</button>
-                                      </form>
+                                        <form action="/rematricula/<%= item.id %>">
+                                            <button type="submit" class="btn btn-primary btn-sm">Rematricular</button>
+                                        </form>
                                     <% } else { %>
-                                      <button type="submit" class="btn btn-success btn-sm" disabled>Rematriculado</button>
+                                        <button class="btn btn-success btn-sm" disabled>Rematriculado</button>
                                     <% } %>
                                 </td>
-                                <!-- <td> <button class="btn btn-info copy-button" data-link="http://127.0.0.1:3000/rematricula/<%= item.id %>/aceite">Copiar</button></td> -->
+                                <td>
+                                    <form action="/admin/editar/<%= item.id %>" method="get">
+                                        <button type="submit" class="btn btn-warning btn-sm">Editar</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="/admin/excluir/<%= item.id %>" method="post" onsubmit="return confirm('Tem certeza que deseja excluir este aluno?');">
+                                        <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                                    </form>
+                                </td>
                             </tr>
                         <% }); %>
                     <% } else { %>
                         <tr>
-                            <td colspan="9" class="text-center">Nenhum aluno encontrado no sistema.</td>
+                            <td colspan="14" class="text-center">Nenhum aluno encontrado no sistema.</td>
                         </tr>
                     <% } %>
                 </tbody>

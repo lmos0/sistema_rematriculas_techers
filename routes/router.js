@@ -26,7 +26,7 @@ const {isAuth} = require('../middlewares/is-auth')
 router.get('/', renderBuscarAluno)
 router.post('/', buscarAluno)
 
-router.get('/growtechers', isAuth, growTechers)
+router.get('/growtechers', growTechers)
 
 router.get('/rematricula/:id', getRematricular)
 router.post('/rematricula/:id', rematriculaSelectModalidade)

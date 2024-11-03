@@ -41,6 +41,7 @@ const Aluno = sequelize.define('Aluno', {
         type: DataTypes.STRING,
         allowNull: false
     },
+  
     level_atual:{
         type: DataTypes.INTEGER,
         allowNull: false
@@ -48,6 +49,11 @@ const Aluno = sequelize.define('Aluno', {
     level_2025:{
         type: DataTypes.INTEGER,
         allowNull: false
+    },
+    segundo_curso:{
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: null
     },
     valor_2024:{
         type: DataTypes.DECIMAL(10,2),
@@ -59,6 +65,10 @@ const Aluno = sequelize.define('Aluno', {
 
     },
     valor_2025:{
+        type: DataTypes.DECIMAL(10,2),
+        allowNull: false
+    },
+    taxa_reajuste:{
         type: DataTypes.DECIMAL(10,2),
         allowNull: false
     },
@@ -88,11 +98,21 @@ const Aluno = sequelize.define('Aluno', {
         allowNull: true,
         defaultValue: null
     },
+    modalidade_segundo_curso:{
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: null
+    },
     turma_2025:{
         type: DataTypes.STRING,
         allowNull: true,
         defaultValue: null
     },
+    turma_2025_segundo_curso:{
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: null
+    }
     
 }, {
 

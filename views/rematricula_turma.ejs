@@ -45,24 +45,44 @@
                 <ul class="list-unstyled">
                     <li><strong>Responsável:</strong> <%= aluno.nome_responsavel %></li>
                     <li><strong>CPF do Responsável:</strong> <%= aluno.cpf_responsavel %></li>
-                    <li><strong>Valor do curso para 2025:</strong> <%= aluno.valor_2025.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %></li>
+                    <li><strong>Idade: <%= aluno.idade %></strong></li>
+                    <li><strong>Valor do curso para 2025:</strong> <%= aluno.valor_2025.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %> (Em até 12x sem juros)</li>
                     <li><strong>Curso Atual:</strong> <%= aluno.curso %></li>
                     <li style="color: red;"><strong>Modalidade:</strong> <%= aluno.modalidade %></li>
+
+                    <% if (aluno.segundo_curso) { %>
+                        <li><strong>Segundo Curso:</strong> <%= aluno.segundo_curso %></li>
+                        <li style="color: red;"><strong>Modalidade segundo curso:</strong> <%= aluno.modalidade_segundo_curso %></li>
+                        
+                     
+                    <% } %>
                 </ul>
             </div>
         </div>
 
         <form action="" method="post" id="rematriculaForm">
-            <h5 class="form-section-title text-center">Turma para 2025</h5>
+            <h5 class="form-section-title text-center">Turma de <%= aluno.curso %></h5>
             <div class="mb-3">
                 <label for="turma_2025" class="form-label">Turma</label>
                 <select name="turma_2025" id="turma_2025" class="form-select" required>
-                    <option disabled selected>Selecione a Turma</option>
+                    <option disabled selected>Selecione a Turma para 2025</option>
                     <% turmas_possiveis.forEach(function(turma) { %>
-                        <option value="<%= turma.nome %>"><%= turma.curso  + ' - ' + turma.dia_semana + ' - ' + turma.horario%></option>
+                        <option value="<%= turma.id %>"><%= turma.curso  + ' - ' + turma.dia_semana + ' - ' + turma.horario%></option>
                     <% }); %>
                 </select>
             </div>
+
+            <% if (aluno.segundo_curso) { %>
+                <h5 class="form-section-title text-center">Turma de <%= aluno.segundo_curso %></h5>
+                <div class="mb-3">
+                    <label for="turma_2025_segundo_curso" class="form-label">Turma</label>
+                    <select name="turma_2025_segundo_curso" id="turma_2025_segundo_curso" class="form-select" required>
+                        <option disabled selected>Selecione a Turma para 2025</option>
+                        <% turmas_possiveis_segundo_curso.forEach(function(turma) { %>
+                            <option value="<%= turma.id %>"><%= turma.curso  + ' - ' + turma.dia_semana + ' - ' + turma.horario%></option>
+                        <% }); %>
+                    </select>
+            <% } %>
 
             <h5 class="form-section-title text-center">Quantidade de Parcelas</h5>
             <div class="mb-3">

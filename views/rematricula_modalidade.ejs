@@ -44,23 +44,44 @@
                     <li><strong>CPF do Responsável:</strong> <%= aluno.cpf_responsavel %></li>
                     <li><strong>Valor do curso para 2025:</strong> <%= aluno.valor_2025.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %> (Em até 12x sem juros)</li>
                     <li><strong>Curso Atual:</strong> <%= aluno.curso %></li>
+                    <% if (aluno.segundo_curso) { %>
+                        <li><strong>Segundo Curso:</strong> <%= aluno.segundo_curso %></li>
+                    <% } %>
                 </ul>
             </div>
         </div>
 
         <form action="" method="post">
-            <h5 class="form-section-title">Modalidade de Ensino</h5>
+            <h5 class="form-section-title">Modalidade de Ensino - Curso de <%= aluno.curso %> </h5>
             <div class="mb-3">
                 <label for="modalidade" class="form-label">Escolha a modalidade das aulas para 2025</label>
                 <select name="modalidade" id="modalidade" class="form-select" required>
-                     <% if (aluno.curso === 'Maker' || aluno.curso === 'Robótica') { %>
-        <option value="Presencial">Presencial</option>
-    <% } else { %>
-        <option value="Presencial">Presencial</option>
-        <option value="Online">Online</option>
-    <% } %>
+                    <% if (aluno.curso === 'Maker' || aluno.curso === 'Robótica') { %>
+                        <option value="Presencial">Presencial</option>
+                    <% } else { %>
+                        <option value="Presencial">Presencial</option>
+                        <option value="Online">Online</option>
+                    <% } %>
                 </select>
             </div>
+        
+            <% if (aluno.segundo_curso) { %>
+                <h5 class="form-section-title">Modalidade de Ensino - Curso de <%= aluno.segundo_curso %> </h5>
+                <div class="mb-3">
+                    <label for="modalidade_segundo_curso" class="form-label">Escolha a modalidade das aulas para 2025</label>
+                    <select name="modalidade_segundo_curso" id="modalidade_segundo_curso" class="form-select" required>
+                        <% if (aluno.segundo_curso === 'Maker' || aluno.segundo_curso === 'Robótica') { %>
+                            <option value="Presencial">Presencial</option>
+                        <% } else { %>
+                            <option value="Presencial">Presencial</option>
+                            <option value="Online">Online</option>
+                        <% } %>
+                    </select>
+                </div>
+            <% } %>
+        
+         
+      
 
             <!-- Buttons Section -->
             <div class="d-flex justify-content-between mt-4">

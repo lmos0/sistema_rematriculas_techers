@@ -33,7 +33,7 @@
                             <tr>
                                 <label hidden><%= item.id %></label>
                                 <td><%= item.nome_aluno %></td>
-                                <td><%= item.turma_2025 %></td>
+                                <td><%= item.turmaNome %></td>
                                 <td><%= (item.valor_2025 / item.quantidade_parcelas).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
                                 <td><%= item.quantidade_parcelas %></td>
                                 <td>R$ <%= item.valor_2025.toFixed(2) %></td>
