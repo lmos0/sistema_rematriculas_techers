@@ -364,7 +364,7 @@ async function loginAdmin(req,res){
 }
 
 async function renderAddTurma (req,res){
-    res.render('addTurma')
+    res.render('addturma')
 }
 
 
