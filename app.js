@@ -27,7 +27,7 @@ app.use(session({
 }));
 
 app.use(flash())
-
+app.set('views', process.env.VIEWS_DIRECTORY)
 app.set('view engine', 'ejs')
 
 app.use(methodOverride('_method'))
