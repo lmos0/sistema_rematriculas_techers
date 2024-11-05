@@ -17,8 +17,8 @@ const app = express()
 
 
 app.use(session({
-    //secret: process.env.SESSION_SECRET,
-    secret: 'test',
+    secret: process.env.SESSION_SECRET,
+    //secret: 'test',
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -42,7 +42,7 @@ app.use('/admin', adminRouter)
 
 sequelize.sync({force:false}).then(() => {
     console.log('Database connected')
-    app.listen(3000, '0.0.0.0', () => {
-        console.log(`Server running on port 3000`)})
+    app.listen(process.env.PORT, '0.0.0.0', () => {
+        console.log(`Server running on port ${process.env.PORT}`)})
     })
 
