@@ -42,7 +42,7 @@
                 <div class="mb-3">
                     <label for="cpf_responsavel" class="form-label visually-hidden">CPF do Responsável</label>
                     <input type="text" name="cpf_responsavel" id="cpf_responsavel" class="form-control" 
-                           placeholder="Digite seu CPF para confirmar a rematrícula" required>
+                           placeholder="Digite seu CPF para confirmar a rematrícula" maxlength="14" oninput="formatCPF(this)" required>
                     <div class="invalid-feedback">
                         Por favor, insira um CPF válido de 11 dígitos.
                     </div>
@@ -54,6 +54,13 @@
                     <!-- Confirm Button -->
                     <button type="submit" class="btn btn-primary">Confirmar Rematrícula</button>
                 </div>
+                <% if (messages && messages.length > 0) { %>
+                    <div class="alert alert-danger text-center mt-4">
+                        <% messages.forEach(function(message) { %>
+                            <p class="mb-0"><%= message %></p>
+                        <% }); %>
+                    </div>
+                <% } %>
             </form>
         </div>
     </div>
@@ -62,6 +69,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
+        document.getElementById('cpf_responsavel').addEventListener('change', function () {
+    this.dataset.rawValue = this.value.replace(/\D/g, ''); // Armazena apenas os números em um atributo `data-raw-value`
+});
+
         // Enable Bootstrap form validation
         (function () {
             'use strict';
@@ -76,6 +87,22 @@
                 }, false);
             });
         })();
+
+        function formatCPF(input) {
+    // Remove tudo que não for número
+    let value = input.value.replace(/\D/g, '');
+
+    // Adiciona a formatação (xxx.xxx.xxx-xx)
+    if (value.length > 3 && value.length <= 6) {
+        value = value.replace(/(\d{3})(\d+)/, '$1.$2');
+    } else if (value.length > 6 && value.length <= 9) {
+        value = value.replace(/(\d{3})(\d{3})(\d+)/, '$1.$2.$3');
+    } else if (value.length > 9) {
+        value = value.replace(/(\d{3})(\d{3})(\d{3})(\d+)/, '$1.$2.$3-$4');
+    }
+
+    input.value = value;
+}
     </script>
 </body>
 </html>

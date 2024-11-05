@@ -108,57 +108,53 @@ catch(err){
 
 async function confirmarAceite(req, res) {
     const id = req.params.id;
-    const {cpf_responsavel} = req.body
-    const aluno = await Aluno.findByPk(id)
-    const turma_2025 = req.session.turma_2025
-    const turma_segundo_curso = req.session.turma_2025_segundo_curso
-    const turma = await Turma.findOne({where: {id: turma_2025}})
-    const turma_segundo = await Turma.findOne({where: {id: turma_segundo_curso}})
-   
-
-    if (!id || !cpf_responsavel) {
-        return res.status(400).send("ID e CPF do responsável são obrigatórios")
-    }
-
-    //const transaction = await sequelize.transaction()
-
+    console.log(id)
     try {
-        const aluno = await Aluno.findByPk(id)
+        
+        const { cpf_responsavel } = req.body;
 
+        if (!id || !cpf_responsavel) {
+            return res.status(400).send("ID e CPF do responsável são obrigatórios");
+        }
 
-    if (!aluno) {
-        //await transaction.rollback()
-        return res.status(404).json({error: "Rematrícula não encontrada"})  
+        const aluno = await Aluno.findByPk(id);
+        
+        if (!aluno) {
+            return res.status(404).json({ error: "Rematrícula não encontrada" });
+        }
+
+        if (aluno.cpf_responsavel !== cpf_responsavel) {
+            req.flash('error', 'CPF do responsável não confere')
+            return res.status(400).redirect(`/rematricula/${id}/aceite`);
+        }
+
+        const turma_2025 = req.session.turma_2025;
+        console.log('req.session ', turma_2025)
+       const turma_segundo_curso = req.session.turma_2025_segundo_curso;
+
+        const turma = await Turma.findOne({ where: { id: turma_2025 } });
+       const turma_segundo = await Turma.findOne({ where: { id: turma_segundo_curso } });
+        console.log(turma)
+        if (!turma || !turma_segundo) {
+            return res.status(404).json({ error: "Turma não encontrada" });
+        }
+
+        aluno.aceite = true;
+        turma.vagas = turma.vagas - 1;
+        turma_segundo.vagas = turma_segundo.vagas - 1;
+        aluno.data_aceite = new Date();
+
+        await aluno.save();
+        await turma.save();
+        await turma_segundo.save();
+
+        console.log(`Rematrícula ${id} confirmada com sucesso`);
+
+        return res.status(201).redirect('/sucesso');
+    } catch (err) {
+        console.error(`Erro ao confirmar aceite da rematrícula ${id}: ${err.message}`);
+        return res.status(500).json({ error: err.message });
     }
-
-    if(aluno.cpf_responsavel !== cpf_responsavel){
-       // await transaction.rollback()
-        return res.status(400).json({error: "CPF do responsável não confere"})
-    }
-    // const turma = await Turma.findOne({ where: { id: aluno.turma_2025 } });
-    //     if (!turma) {
-    //         return res.status(404).json({ error: "Turma não encontrada" });
-    //     }
-    
-    
-    aluno.aceite = true
-    turma.vagas = turma.vagas - 1
-    turma_segundo.vagas = turma_segundo.vagas - 1
-    aluno.data_aceite = new Date()
-   
-
-    await aluno.save()
-    await turma.save()
-   // await transaction.commit()
-    console.log(`Rematrícula ${id} confirmada com sucesso`)
-
-    return res.status(201).redirect('/sucesso')
-}
-catch(err){
-    //await transaction.rollback()
-    console.error(`Erro ao confirmar aceite da rematrícula ${id}: ${err.message}`);
-    return res.status(500).json({error: err.message})
-}
 }
 
 async function renderConfirmarMensalidadeTurma(req, res) {

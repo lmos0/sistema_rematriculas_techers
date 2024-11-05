@@ -14,12 +14,13 @@ const {addAluno,
     renderMatriculasConcluidas,
     postEditTurma,
     postEditAluno,
+    renderAdmin,
 renderEditTurma} = require('../controllers/adminControllers')
 
 const {isAuth} = require('../middlewares/is-auth')
 
 //Login
-router.get('/', (req, res) => res.render('login'))
+router.get('/', renderAdmin)
 router.post('/', loginAdmin)
 
 router.post('/registrar',  registerAdmin )
@@ -37,7 +38,7 @@ router.post('/turmas/editar/:id', isAuth, postEditTurma)
 
 //alunos
 router.get('/alunos', isAuth, getAlunos)
-router.get('/alunos/adicionar', isAuth, (req, res) => res.render('addaluno'))
+router.get('/alunos/adicionar', isAuth, (req, res) => res.render('addaluno', {messages: req.flash('error')}))
 router.post('/alunos/adicionar', isAuth, addAluno)
 
 //deletar

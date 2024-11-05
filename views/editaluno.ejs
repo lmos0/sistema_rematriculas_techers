@@ -88,6 +88,13 @@
             </div>
 
             <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+            <% if (messages && messages.length > 0) { %>
+                <div class="alert alert-danger text-center mt-4">
+                    <% messages.forEach(function(message) { %>
+                        <p class="mb-0"><%= message %></p>
+                    <% }); %>
+                </div>
+            <% } %>
         </form>
     </div>
 

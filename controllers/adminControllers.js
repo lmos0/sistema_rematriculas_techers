@@ -32,9 +32,10 @@ async function addAluno(req,res){
          let valor_2025 = (valor_2024 * taxa_reajuste) * quantidade_parcelas_2024
          
 
-        if (!nome_aluno || !nome_responsavel || !cpf_responsavel || !curso || !level_atual || !valor_2024 || !data_de_nascimento || !quantidade_parcelas_2024){ {
-            return res.status(400).json("Todos os campos são obrigatórios");
-        }
+        if (!nome_aluno || !nome_responsavel || !cpf_responsavel || !curso || !level_atual || !valor_2024 || !data_de_nascimento || !quantidade_parcelas_2024){ 
+            req.flash('error', 'Todos os campos são obrigatórios')
+            return res.status(400).redirect('/admin/alunos')
+        
     }
 
 try{
@@ -100,7 +101,7 @@ async function deleteAlunos(req,res){
             return res.status(404).json("Aluno não encontrado")
         }
         await aluno.destroy()
-        return res.status(200).json("Aluno deletado com sucesso")
+        return res.status(200).redirect('/admin/alunos')
     }
     catch(err){
         console.error('Erro ao deletar aluno:', err)
@@ -115,7 +116,7 @@ async function renderEditAluno(req,res){
         if(!aluno){
             return res.status(404).json("Aluno não encontrado")
         }
-        return res.status(200).render('editaluno', {aluno})
+        return res.status(200).render('editaluno', {aluno, messages: req.flash('error')})
     }
     catch(err){
         console.error('Erro ao buscar aluno:', err)
@@ -155,7 +156,7 @@ async function postEditTurma(req,res){
         turma.vagas = vagas
         turma.faixa_etaria = faixa_etaria
         await turma.save()
-        return res.status(200).json(turma)
+        return res.status(200).redirect('/admin/turmas')
     }
     catch(err){
         console.error('Erro ao editar turma:', err)
@@ -183,12 +184,13 @@ async function postEditAluno(req, res) {
     const valor_2025 = (valor_2024 * taxa_reajuste) * quantidade_parcelas_2024;
 
     if (!nome_aluno || !nome_responsavel || !cpf_responsavel || !curso || !level_atual || !valor_2024 || !data_de_nascimento || !quantidade_parcelas_2024) {
-        return res.status(400).json("Todos os campos são obrigatórios");
+        req.flash('error', 'Todos os campos são obrigatórios')
+        return res.status(400).redirect(`/admin/alunos/editar/${req.params.id}`);
     }
 
     try {
         // Find the existing student by a unique identifier (e.g., cpf_responsavel)
-        const alunoExistente = await Aluno.findOne({ cpf_responsavel });
+        const alunoExistente = await Aluno.findOne({ where:{nome_aluno} });
 
         if (!alunoExistente) {
             return res.status(404).json({ error: 'Aluno não encontrado' });
@@ -262,13 +264,21 @@ async function getAlunos(req, res) {
 
 async function getRematriculaById(req, res) {
     const id = req.params.id;
+
+    if (!id) {
+        throw new Error('ID não fornecido');
+    }
+
+
     const rematricula = await Aluno.findByPk(id);
-    const turma = await Turma.findOne({where: {curso: rematricula.curso, level: rematricula.level_2025}})
-    const turmaSegundoCurso = await Turma.findOne({where: {curso: rematricula.segundo_curso}})
+    
 
     if (!rematricula) {
         return res.status(404).send("Rematrícula não encontrada");
     }
+
+    const turma = await Turma.findOne({where: {curso: rematricula.curso, level: rematricula.level_2025}})
+    const turmaSegundoCurso = await Turma.findOne({where: {curso: rematricula.segundo_curso}})
 
     if(!rematricula.turma_2025 || !rematricula.valor_2025 || !rematricula.quantidade_parcelas || !rematricula.forma_de_pagamento){
         return res.status(400).send("Rematrícula não está completa")
@@ -279,7 +289,7 @@ try{
         return res.status(208).render('aceiteconfirmado', { rematricula });
     }
 
-    res.render('aceite', { rematricula, turma, turmaSegundoCurso });
+    res.render('aceite', { rematricula, turma, turmaSegundoCurso, messages: req.flash('error') });
 }
 catch(err){
     console.error('Erro ao buscar rematrícula:', err)
@@ -329,12 +339,20 @@ async function registerAdmin (req,res){
     }
 }
 
+async function renderAdmin(req,res){
+    if (req.session.admin){
+        return res.redirect('/admin/alunos')
+    }
+    res.render('login', {messages: req.flash('error')})
+}
+
 async function loginAdmin(req,res){
     const {email, password} = req.body
     try{
         const admin = await Admin.findOne({where: {email, password}})
         if(!admin){
-            return res.status(404).send("Admin não encontrado")
+            req.flash('error', 'Credenciais inválidas')
+            return res.status(404).redirect('/admin')
         }
         req.session.admin = admin
         res.status(200).redirect('/admin/alunos')
@@ -366,5 +384,6 @@ module.exports = {
     renderAddTurma,
     renderEditAluno,
     renderMatriculasConcluidas,
-    renderEditTurma
+    renderEditTurma,
+    renderAdmin
 }

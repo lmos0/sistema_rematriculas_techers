@@ -27,6 +27,14 @@
                         <input type="password" class="form-control" name="password" id="password" placeholder="Digite sua senha">
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Logar</button>
+                    
+                    <% if (messages && messages.length > 0) { %>
+                        <div class="alert alert-danger text-center mt-4">
+                            <% messages.forEach(function(message) { %>
+                                <p class="mb-0"><%= message %></p>
+                            <% }); %>
+                        </div>
+                    <% } %>
                 </form>
             </div>
         </div>
