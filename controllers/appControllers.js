@@ -108,7 +108,9 @@ catch(err){
 
 async function confirmarAceite(req, res) {
     const id = req.params.id;
-    console.log(id)
+    console.log(`Confirmar aceite da rematrícula ${id}`);
+    console.log('Body da requisição', req.body);
+    console.log('Session', req.session);
     try {
         
         const { cpf_responsavel } = req.body;
@@ -129,24 +131,34 @@ async function confirmarAceite(req, res) {
         }
 
         const turma_2025 = req.session.turma_2025;
-        console.log('req.session ', turma_2025)
+        console.log('req.session turma_2025:', turma_2025)
        const turma_segundo_curso = req.session.turma_2025_segundo_curso;
 
+       let turma_segundo = null;
+
         const turma = await Turma.findOne({ where: { id: turma_2025 } });
+        if (turma_segundo_curso) {
+
        const turma_segundo = await Turma.findOne({ where: { id: turma_segundo_curso } });
-        console.log(turma)
-        if (!turma || !turma_segundo) {
+        console.log('variável turma:', turma)
+        console.log('variável turma_segundo:', turma_segundo)
+        } 
+        if (!turma && !turma_segundo) {
             return res.status(404).json({ error: "Turma não encontrada" });
         }
 
         aluno.aceite = true;
         turma.vagas = turma.vagas - 1;
-        turma_segundo.vagas = turma_segundo.vagas - 1;
+        
         aluno.data_aceite = new Date();
 
         await aluno.save();
         await turma.save();
-        await turma_segundo.save();
+        if (turma_segundo){
+            await turma_segundo.save();
+            turma_segundo.vagas = turma_segundo.vagas - 1;
+        }
+        
 
         console.log(`Rematrícula ${id} confirmada com sucesso`);
 
@@ -180,13 +192,13 @@ async function renderConfirmarMensalidadeTurma(req, res) {
         case (aluno.idade < 8):
             idadeDoAluno = "kids";
             break;
-        case (aluno.idade >= 8 && aluno.idade <= 10):
+        case (aluno.idade >= 7 && aluno.idade <= 11):
             idadeDoAluno = "jr1";
             break;
-        case (aluno.idade > 10 && aluno.idade <= 12):
+        case (aluno.idade > 10 && aluno.idade <= 13):
             idadeDoAluno = "jr2";
             break;
-        case (aluno.idade > 12 && aluno.idade <= 17):
+        case (aluno.idade > 11 && aluno.idade <= 17):
             idadeDoAluno = "teens";
             break;
         case (aluno.idade > 17):
@@ -282,7 +294,7 @@ async function confirmarMensalidadeTurma(req, res) {
 
         req.session.turma_2025 = turma_2025
         req.session.turma_2025_segundo_curso = turma_2025_segundo_curso
-        console.log(req.session.turma_2025);
+        console.log('mostra essa sessão ai:', req.session.turma_2025, req.session.turma_2025_segundo_curso);
 
         // Redirect to success page
         res.redirect(`/rematricula/${id}/aceite`);

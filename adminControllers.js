@@ -23,8 +23,6 @@ async function addAluno(req,res){
          reajuste,
         segundo_curso} = req.body
 
-        req.body.nome_aluno = req.body.nome_aluno.trim()
-
          const nome_aluno_busca = removeAccents(req.body.nome_aluno).toLowerCase()
 
          const taxa_reajuste = (Number(req.body.reajuste) / 100) + 1
@@ -87,7 +85,7 @@ async function deleteTurma(req,res){
             return res.status(404).json("Turma não encontrada")
         }
         await turma.destroy()
-        return res.status(200).redirect('/admin/turmas')
+        return res.status(200).json("Turma deletada com sucesso")
     }
     catch(err){
         console.error('Erro ao deletar turma:', err)
@@ -366,7 +364,7 @@ async function loginAdmin(req,res){
 }
 
 async function renderAddTurma (req,res){
-    res.render('addturma')
+    res.render('addTurma')
 }
 
 

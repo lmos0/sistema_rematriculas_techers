@@ -34,3 +34,9 @@ out/
 # OS specific files
 .DS_Store
 Thumbs.db
+
+# SSL Certificates
+*.pem
+*.crt
+*.key
+*.csr
