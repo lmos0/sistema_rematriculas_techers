@@ -1,59 +1,552 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="icon-red.svg" type="image/svg+xml">
-    <title>Rematriculas Concluídas</title>
+    <title>Rematrículas Concluídas TECHERS</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6a1b9a;
+            --primary-light: #9c4dcc;
+            --primary-dark: #38006b;
+            --secondary: #2d2d2d;
+            --light: #f8f9fa;
+            --white: #ffffff;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --success: #28a745;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #eef1f5 100%);
+            font-family: 'Poppins', 'Segoe UI', system-ui, sans-serif;
+            color: var(--secondary);
+        }
+
+        .navbar {
+            background: var(--white) !important;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            color: var(--primary) !important;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .brand-icon {
+            background-color: var(--primary);
+            color: white;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+        
+        .page-header {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .page-title {
+            color: var(--primary);
+            font-weight: 700;
+            margin: 0;
+            font-size: 1.75rem;
+        }
+        
+        .stats-container {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .stat-card {
+            background: var(--white);
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        
+        .stat-icon {
+            background: rgba(106, 27, 154, 0.1);
+            color: var(--primary);
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .stat-text {
+            margin: 0;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .stat-value {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .table-container {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        
+        .data-table {
+            margin-bottom: 0;
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+        }
+
+        .data-table thead th {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            padding: 1rem 1rem;
+            border: none;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .data-table thead th:first-child {
+            border-top-left-radius: 12px;
+        }
+        
+        .data-table thead th:last-child {
+            border-top-right-radius: 12px;
+        }
+
+        .data-table tbody tr {
+            transition: all 0.2s ease;
+            border-bottom: 1px solid rgba(0,0,0,0.04);
+        }
+        
+        .data-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .data-table tbody td {
+            padding: 1rem;
+            vertical-align: middle;
+            font-size: 0.9rem;
+            color: var(--secondary);
+            border: none;
+        }
+        
+        .student-name {
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        .status-badge {
+            padding: 0.4rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        .status-confirmed {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+        
+        .payment-badge {
+            padding: 0.4rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        .payment-pix {
+            background-color: rgba(106, 27, 154, 0.1);
+            color: var(--primary);
+        }
+        
+        .payment-credit {
+            background-color: rgba(0, 123, 255, 0.1);
+            color: #0d6efd;
+        }
+        
+        .payment-cash {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+        
+        .payment-boleto {
+            background-color: rgba(108, 117, 125, 0.1);
+            color: #6c757d;
+        }
+        
+        .search-container {
+            position: relative;
+            max-width: 300px;
+            margin-left: auto;
+        }
+        
+        .search-input {
+            border: 2px solid rgba(106, 27, 154, 0.2);
+            border-radius: 100px;
+            padding: 0.5rem 1rem 0.5rem 2.5rem;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(106, 27, 154, 0.15);
+        }
+        
+        .search-icon {
+            position: absolute;
+            top: 50%;
+            left: 1rem;
+            transform: translateY(-50%);
+            color: var(--primary);
+        }
+        
+        .btn {
+            border-radius: 8px;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+            border: none;
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .btn-success:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        
+        .empty-state {
+            padding: 3rem 1rem;
+            text-align: center;
+        }
+        
+        .empty-icon {
+            font-size: 3rem;
+            color: rgba(106, 27, 154, 0.2);
+            margin-bottom: 1rem;
+        }
+        
+        .empty-text {
+            color: #6c757d;
+            font-size: 1.1rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .class-badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            background-color: rgba(106, 27, 154, 0.1);
+            color: var(--primary);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .summary-card {
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            color: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 30px rgba(106, 27, 154, 0.2);
+        }
+        
+        .summary-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .summary-stats {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .summary-item {
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .summary-label {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+        
+        .summary-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .payment-icon {
+            width: 24px;
+            height: 24px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.25rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 992px) {
+            .data-table {
+                min-width: 1000px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .search-container {
+                max-width: 100%;
+                width: 100%;
+                margin-top: 1rem;
+            }
+            
+            .stats-container {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .stat-card {
+                width: 100%;
+            }
+            
+            .summary-stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
+    <!-- Navbar -->
     <%- include('includes/navbar') %>
-    <div class="container my-5">
-        <h1 class="text-center mb-4">Alunos Rematriculados para 2025</h1>
+    
+    <div class="container my-4">
+        <!-- Header Section -->
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Rematrículas Concluídas 2025</h1>
+            </div>
+            
+            <!-- Search Bar -->
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" placeholder="Buscar aluno...">
+            </div>
+        </div>
+        
+        <!-- Summary Card -->
+        <div class="summary-card">
+            <h2 class="summary-title">
+                <i class="fas fa-chart-pie"></i>
+                Resumo de Rematrículas
+            </h2>
+            <div class="summary-stats">
+                <div class="summary-item">
+                    <div class="summary-label">Total de Alunos</div>
+                    <div class="summary-value"><%= rematriculas.length %></div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Valor Total</div>
+                    <div class="summary-value">
+                        <%= rematriculas.reduce((sum, item) => sum + item.valor_2025, 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %>
+                    </div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Média por Aluno</div>
+                    <div class="summary-value">
+                        <%= rematriculas.length > 0 ? 
+                            (rematriculas.reduce((sum, item) => sum + item.valor_2025, 0) / rematriculas.length).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : 
+                            'R$ 0,00' %>
+                    </div>
+                </div>
+               
+            </div>
+        </div>
+        
+        <!-- Stats Cards -->
+        <div class="stats-container mb-4">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <p class="stat-text">Total de Rematrículas: <span class="stat-value"><%= rematriculas.length %></span></p>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <p class="stat-text">Último Processamento: <span class="stat-value"><%= new Date().toLocaleDateString('pt-BR') %></span></p>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-credit-card"></i>
+                </div>
+                <p class="stat-text">Pagamentos Confirmados: <span class="stat-value"><%= rematriculas.length %></span></p>
+            </div>
+        </div>
 
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped text-center">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Aluno</th>
-                        <th>Turma 2025</th>
-                        <th>Parcela 2025</th>
-                        <th>Parcelas</th>
-                        <th>Total</th>
-                        <th>Forma de Pagamento</th>
-                        <th>Data de Confirmação</th>
-                        <th>Pagamento</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% if (rematriculas.length > 0) { %>
-                        <% rematriculas.forEach(function(item) { %>
-                            <tr>
-                                <label hidden><%= item.id %></label>
-                                <td><%= item.nome_aluno %></td>
-                                <td><%= item.turmaNome %></td>
-                                <td><%= (item.valor_2025 / item.quantidade_parcelas).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
-                                <td><%= item.quantidade_parcelas %></td>
-                                <td>R$ <%= item.valor_2025.toFixed(2) %></td>
-                                <td><%= item.forma_de_pagamento %></td>
-                                <td><%= item.data_aceite ? new Date(item.data_aceite).toLocaleDateString('pt-BR') : '' %></td>
-                                <td><button class="btn btn-success" disabled>Confirmado</button>
-                                  </td>
-                            </tr>
-                        <% }); %>
-                    <% } else { %>
+        <!-- Table Card -->
+        <div class="table-container">
+            <div class="table-responsive">
+                <table class="table data-table table-hover">
+                    <thead>
                         <tr>
-                            <td colspan="8" class="text-center">Nenhuma rematrícula encontrada.</td>
+                            <th>Aluno(a)</th>
+                            <th>Turma 2025</th>
+                            <th>Parcela</th>
+                            <th>Parcelas</th>
+                            <th>Total</th>
+                            <th>Forma de Pagamento</th>
+                            <th>Data de Confirmação</th>
+                            <th>Status</th>
                         </tr>
-                    <% } %>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <% if (rematriculas && rematriculas.length > 0) { %>
+                            <% rematriculas.forEach(function(item) { %>
+                                <tr>
+                                    <td class="student-name"><%= item.nome_aluno %></td>
+                                    <td><span class="class-badge"><%= item.turmaNome %></span></td>
+                                    <td><%= (item.valor_2025 / item.quantidade_parcelas).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
+                                    <td><%= item.quantidade_parcelas %></td>
+                                    <td><%= item.valor_2025.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
+                                    <td>
+                                        <% let paymentClass = ''; 
+                                           let paymentIcon = '';
+                                           
+                                           if (item.forma_de_pagamento === 'PIX') {
+                                               paymentClass = 'payment-pix';
+                                               paymentIcon = 'fa-qrcode';
+                                           } else if (item.forma_de_pagamento === 'Cartão de Crédito') {
+                                               paymentClass = 'payment-credit';
+                                               paymentIcon = 'fa-credit-card';
+                                           } else if (item.forma_de_pagamento === 'Dinheiro') {
+                                               paymentClass = 'payment-cash';
+                                               paymentIcon = 'fa-money-bill-wave';
+                                           } else {
+                                               paymentClass = 'payment-boleto';
+                                               paymentIcon = 'fa-file-invoice';
+                                           }
+                                        %>
+                                        <span class="payment-badge <%= paymentClass %>">
+                                            <i class="fas <%= paymentIcon %> payment-icon"></i>
+                                            <%= item.forma_de_pagamento %>
+                                        </span>
+                                    </td>
+                                    <td><%= item.data_aceite ? new Date(item.data_aceite).toLocaleDateString('pt-BR') : '-' %></td>
+                                    <td>
+                                        <span class="status-badge status-confirmed">
+                                            <i class="fas fa-check-circle"></i> Confirmado
+                                        </span>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="8">
+                                    <div class="empty-state">
+                                        <div class="empty-icon">
+                                            <i class="fas fa-user-graduate"></i>
+                                        </div>
+                                        <p class="empty-text">Nenhuma rematrícula encontrada no sistema.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Search functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.querySelector('.search-input');
+            const tableRows = document.querySelectorAll('.data-table tbody tr');
+            
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                
+                tableRows.forEach(row => {
+                    // Don't search the empty state row
+                    if (row.cells.length === 1) return;
+                    
+                    const studentName = row.querySelector('.student-name').textContent.toLowerCase();
+                    const className = row.cells[1].textContent.toLowerCase();
+                    
+                    if (studentName.includes(searchTerm) || className.includes(searchTerm)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

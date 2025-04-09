@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,80 +7,546 @@
     <title>Lista de Alunos TECHERS</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6a1b9a;
+            --primary-light: #9c4dcc;
+            --primary-dark: #38006b;
+            --secondary: #2d2d2d;
+            --light: #f8f9fa;
+            --white: #ffffff;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --success: #28a745;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #eef1f5 100%);
+            font-family: 'Poppins', 'Segoe UI', system-ui, sans-serif;
+            color: var(--secondary);
+        }
+
+        .navbar {
+            background: var(--white) !important;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            color: var(--primary) !important;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .brand-icon {
+            background-color: var(--primary);
+            color: white;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+        
+        .page-header {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .page-title {
+            color: var(--primary);
+            font-weight: 700;
+            margin: 0;
+            font-size: 1.75rem;
+        }
+        
+        .stats-container {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .stat-card {
+            background: var(--white);
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        
+        .stat-icon {
+            background: rgba(106, 27, 154, 0.1);
+            color: var(--primary);
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .stat-text {
+            margin: 0;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .stat-value {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        
+        .card-header {
+            background-color: var(--white);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding: 1.25rem 1.5rem;
+        }
+        
+        .card-title {
+            margin: 0;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        .table-container {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        
+        .data-table {
+            margin-bottom: 0;
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+        }
+
+        .data-table thead th {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            padding: 1rem 1rem;
+            border: none;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .data-table thead th:first-child {
+            border-top-left-radius: 12px;
+        }
+        
+        .data-table thead th:last-child {
+            border-top-right-radius: 12px;
+        }
+
+        .data-table tbody tr {
+            transition: all 0.2s ease;
+            border-bottom: 1px solid rgba(0,0,0,0.04);
+        }
+        
+        .data-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .data-table tbody td {
+            padding: 1rem;
+            vertical-align: middle;
+            font-size: 0.9rem;
+            color: var(--secondary);
+            border: none;
+        }
+        
+        .data-table .student-name {
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        .data-table .status-badge {
+            padding: 0.4rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        .status-confirmed {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+        
+        .status-pending {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: var(--warning);
+        }
+        
+        .btn {
+            border-radius: 8px;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+            border: none;
+        }
+        
+        .btn-sm {
+            padding: 0.35rem 0.75rem;
+            font-size: 0.85rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+        
+        .btn-warning {
+            background-color: var(--warning);
+            color: var(--secondary);
+        }
+        
+        .btn-warning:hover {
+            background-color: #e5ac00;
+            color: var(--secondary);
+            transform: translateY(-1px);
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c82333;
+            transform: translateY(-1px);
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .btn-success:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        
+        .action-cell {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+        
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            color: white;
+            transition: all 0.2s ease;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn-edit {
+            background-color: var(--warning);
+        }
+        
+        .btn-delete {
+            background-color: var(--danger);
+        }
+        
+        .btn-enroll {
+            background-color: var(--primary);
+        }
+        
+        .btn-enrolled {
+            background-color: var(--success);
+        }
+        
+        .financial-row {
+            background-color: rgba(106, 27, 154, 0.02);
+        }
+        
+        .course-badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            background-color: rgba(106, 27, 154, 0.1);
+            color: var(--primary);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin: 0.15rem;
+        }
+        
+        .pagination {
+            margin-top: 2rem;
+        }
+        
+        .page-link {
+            border: none;
+            margin: 0 0.25rem;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            color: var(--primary);
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .page-link:hover {
+            background-color: rgba(106, 27, 154, 0.1);
+            color: var(--primary);
+            transform: translateY(-1px);
+        }
+        
+        .page-item.active .page-link {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .page-item.disabled .page-link {
+            color: #ced4da;
+            background-color: transparent;
+        }
+        
+        .search-container {
+            position: relative;
+            max-width: 300px;
+            margin-left: auto;
+        }
+        
+        .search-input {
+            border: 2px solid rgba(106, 27, 154, 0.2);
+            border-radius: 100px;
+            padding: 0.5rem 1rem 0.5rem 2.5rem;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(106, 27, 154, 0.15);
+        }
+        
+        .search-icon {
+            position: absolute;
+            top: 50%;
+            left: 1rem;
+            transform: translateY(-50%);
+            color: var(--primary);
+        }
+        
+        .empty-state {
+            padding: 3rem 1rem;
+            text-align: center;
+        }
+        
+        .empty-icon {
+            font-size: 3rem;
+            color: rgba(106, 27, 154, 0.2);
+            margin-bottom: 1rem;
+        }
+        
+        .empty-text {
+            color: #6c757d;
+            font-size: 1.1rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 992px) {
+            .data-table {
+                min-width: 1200px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .search-container {
+                max-width: 100%;
+                width: 100%;
+                margin-top: 1rem;
+            }
+            
+            .stats-container {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .stat-card {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
+    <!-- Navbar -->
     <%- include('includes/navbar') %>
-    <div class="container my-5">
-        <h1 class="text-center mb-4">Lista de Alunos TECHERS</h1>
+    
+    <div class="container my-4">
+        <!-- Header Section -->
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Lista de Alunos</h1>
+            </div>
+            
+            <!-- Search Bar -->
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" placeholder="Buscar aluno...">
+            </div>
+        </div>
         
-        <div class="mb-3">
-            <p>Total de Alunos: <%= totalAlunos %></p>
-            <p>Página <%= currentPage %> de <%= totalPages %></p>
+        <!-- Stats Cards -->
+        <div class="stats-container mb-4">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <p class="stat-text">Total de Alunos: <span class="stat-value"><%= totalAlunos %></span></p>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <p class="stat-text">Página <span class="stat-value"><%= currentPage %></span> de <span class="stat-value"><%= totalPages %></span></p>
+            </div>
         </div>
 
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped text-center">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Aluno(a)</th>
-                        <th>Cursos</th>
-                        <th>Level</th>
-                        <th>Idade</th>
-                        <th>Responsável</th>
-                        <th>Parcela em 2024</th>
-                        <th>Valor Total em 2024</th>
-                        <th>Taxa de Reajuste</th>
-                        <th>Valor para 2025</th>
-                        <th>Aceite</th>
-                        <th>Data de Confirmação</th>
-                        <th>Rematricular</th>
-                        <th>Editar</th>
-                        <th>Excluir</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% if (alunos.length > 0) { %>
-                        <% alunos.forEach(function(item) { %>
+        <!-- Table Card -->
+        <div class="table-container">
+            <div class="table-responsive">
+                <table class="table data-table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Aluno(a)</th>
+                            <th>Cursos</th>
+                            <th>Level</th>
+                            <th>Idade</th>
+                            <th>Responsável</th>
+                            <th>Parcela (2024)</th>
+                            <th>Total (2024)</th>
+                            <th>Reajuste</th>
+                            <th>Valor (2025)</th>
+                            <th>Status</th>
+                            <th>Confirmação</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (alunos && alunos.length > 0) { %>
+                            <% alunos.forEach(function(item) { %>
+                                <tr>
+                                    <td class="student-name"><%= item.nome_aluno %></td>
+                                    <td>
+                                        <span class="course-badge"><%= item.curso %></span>
+                                        <% if (item.segundo_curso) { %>
+                                            <span class="course-badge"><%= item.segundo_curso %></span>
+                                        <% } %>
+                                    </td>
+                                    <td><%= item.level_atual %></td>
+                                    <td><%= item.idade %></td>
+                                    <td><%= item.nome_responsavel %></td>
+                                    <td><%= item.valor_2024.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %></td>
+                                    <td><%= (item.valor_2024 * item.quantidade_parcelas_2024).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %></td>
+                                    <td><%= item.taxa_reajuste %>%</td>
+                                    <td><%= item.valor_2025.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %></td>
+                                    <td>
+                                        <span class="status-badge <%= item.aceite ? 'status-confirmed' : 'status-pending' %>">
+                                            <%= item.aceite ? 'Confirmado' : 'Pendente' %>
+                                        </span>
+                                    </td>
+                                    <td><%= item.data_aceite ? new Date(item.data_aceite).toLocaleDateString('pt-BR') : '-' %></td>
+                                    <td>
+                                        <div class="action-cell">
+                                            <% if (!item.aceite) { %>
+                                                <a href="/rematricula/<%= item.id %>" class="action-btn btn-enroll" title="Rematricular">
+                                                    <i class="fas fa-user-plus"></i>
+                                                </a>
+                                            <% } else { %>
+                                                <button class="action-btn btn-enrolled" disabled title="Rematriculado">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                            <% } %>
+                                            
+                                            <a href="/admin/alunos/editar/<%= item.id %>" class="action-btn btn-edit" title="Editar">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            
+                                            <button type="button" class="action-btn btn-delete" 
+                                                    onclick="confirmarExclusao('<%= item.id %>')" title="Excluir">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        <% } else { %>
                             <tr>
-                                <td><%= item.nome_aluno %></td>
-                                <td><%= item.curso %> <%= item.segundo_curso %></td>
-                                <td><%= item.level_atual %></td>
-                                <td><%= item.idade %></td>
-                                <td><%= item.nome_responsavel %></td>
-                                <td><%= item.valor_2024.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %></td>
-                                <td><%= (item.valor_2024 * item.quantidade_parcelas_2024).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %></td>
-                                <td><%= item.taxa_reajuste %>%</td>
-                                <td><%= item.valor_2025.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %></td>
-                                <td><%= item.aceite ? 'Confirmado' : 'Pendente' %></td>
-                                <td><%= item.data_aceite ? new Date(item.data_aceite).toLocaleDateString('pt-BR') : '' %></td>
-                                <td>
-                                    <% if (!item.aceite) { %>
-                                        <form action="/rematricula/<%= item.id %>">
-                                            <button type="submit" class="btn btn-primary btn-sm">Rematricular</button>
-                                        </form>
-                                    <% } else { %>
-                                        <button class="btn btn-success btn-sm" disabled>Rematriculado</button>
-                                    <% } %>
-                                </td>
-                                <td>
-                                    <form action="/admin/alunos/editar/<%= item.id %>" method="get">
-                                        <button type="submit" class="btn btn-warning btn-sm">Editar</button>
-                                    </form>
-                                </td>
-                                <td>
-                                    <form action="/admin/alunos/excluir/<%= item.id %>" method="post" onsubmit="return confirm('Tem certeza que deseja excluir este aluno?');">
-                                        <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
-                                    </form>
+                                <td colspan="12">
+                                    <div class="empty-state">
+                                        <div class="empty-icon">
+                                            <i class="fas fa-user-graduate"></i>
+                                        </div>
+                                        <p class="empty-text">Nenhum aluno encontrado no sistema. Adicione novos alunos para começar.</p>
+                                    </div>
                                 </td>
                             </tr>
-                        <% }); %>
-                    <% } else { %>
-                        <tr>
-                            <td colspan="14" class="text-center">Nenhum aluno encontrado no sistema.</td>
-                        </tr>
-                    <% } %>
-                </tbody>
-            </table>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- Pagination controls -->
@@ -88,11 +554,26 @@
             <ul class="pagination justify-content-center">
                 <% if (currentPage > 1) { %>
                     <li class="page-item">
-                        <a class="page-link" href="?page=<%= currentPage - 1 %>">&laquo; Anterior</a>
+                        <a class="page-link" href="?page=<%= currentPage - 1 %>" aria-label="Previous">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                    </li>
+                <% } else { %>
+                    <li class="page-item disabled">
+                        <span class="page-link"><i class="fas fa-chevron-left"></i></span>
                     </li>
                 <% } %>
                 
-                <% for(let i = 1; i <= totalPages; i++) { %>
+                <% 
+                let startPage = Math.max(1, currentPage - 2);
+                let endPage = Math.min(totalPages, startPage + 4);
+                
+                if (endPage - startPage < 4) {
+                    startPage = Math.max(1, endPage - 4);
+                }
+                
+                for(let i = startPage; i <= endPage; i++) { 
+                %>
                     <li class="page-item <%= i === currentPage ? 'active' : '' %>">
                         <a class="page-link" href="?page=<%= i %>"><%= i %></a>
                     </li>
@@ -100,31 +581,75 @@
                 
                 <% if (currentPage < totalPages) { %>
                     <li class="page-item">
-                        <a class="page-link" href="?page=<%= currentPage + 1 %>">Próxima &raquo;</a>
+                        <a class="page-link" href="?page=<%= currentPage + 1 %>" aria-label="Next">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </li>
+                <% } else { %>
+                    <li class="page-item disabled">
+                        <span class="page-link"><i class="fas fa-chevron-right"></i></span>
                     </li>
                 <% } %>
             </ul>
         </nav>
     </div>
 
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 16px; border: none; overflow: hidden;">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Confirmar Exclusão</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body py-4">
+                    <div class="text-center mb-3">
+                        <i class="fas fa-exclamation-triangle text-danger" style="font-size: 3rem;"></i>
+                    </div>
+                    <p class="text-center fs-5">Tem certeza que deseja excluir este aluno?</p>
+                    <p class="text-center text-muted">Esta ação não poderá ser desfeita.</p>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <form id="deleteForm" action="" method="post">
+                        <button type="submit" class="btn btn-danger">Excluir</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const buttons = document.querySelectorAll('.copy-button');
-
-      buttons.forEach(button => {
-        button.addEventListener('click', function() {
-          const link = this.getAttribute('data-link');
-          navigator.clipboard.writeText(link).then(function() {
-            console.log('Link copied to clipboard successfully!');
-          }, function(err) {
-            console.error('Could not copy link: ', err);
-          });
+    <script>
+        // Function to prepare and show the delete confirmation modal
+        function confirmarExclusao(id) {
+            document.getElementById('deleteForm').action = '/admin/alunos/excluir/' + id;
+            const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+            deleteModal.show();
+        }
+        
+        // Search functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.querySelector('.search-input');
+            const tableRows = document.querySelectorAll('.data-table tbody tr');
+            
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                
+                tableRows.forEach(row => {
+                    const studentName = row.querySelector('.student-name').textContent.toLowerCase();
+                    const responsibleName = row.cells[4].textContent.toLowerCase();
+                    
+                    if (studentName.includes(searchTerm) || responsibleName.includes(searchTerm)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
         });
-      });
-    });
-</script>
+    </script>
+</body>
 </html>

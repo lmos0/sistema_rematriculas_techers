@@ -1,44 +1,341 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/">Sistema de Rematrículas</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <!-- Logo for mobile -->
+        <a class="navbar-brand d-flex align-items-center" href="/admin">
+            <div class="brand-icon me-2">
+                <img src="https://techers.com.br/wp-content/uploads/2023/05/logo.png" 
+                     alt="TECHERS Logo" 
+                     class="img-fluid">
+            </div>
+            <span>TECHERS</span>
+        </a>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin">Home</a>
-                </li>
+
+        <div class="collapse navbar-collapse" id="mainNav">
+            <ul class="navbar-nav me-auto">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="turmasDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Alunos
+                    <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="turmasDropdown">
-                        <li><a class="dropdown-item" href="/admin/alunos/adicionar">Novo Aluno</a></li>
-                        <li><a class="dropdown-item" href="/admin/alunos">Todos os Alunos</a></li>
-                        
+                    <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                        <li><a class="dropdown-item" href="/admin"><i class="fas fa-home me-2"></i>Home</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/admin/rematriculados"><i class="fas fa-check-circle me-2"></i>Rematriculados</a></li>
                     </ul>
                 </li>
+                
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="turmasDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Turmas
+                    <a class="nav-link dropdown-toggle" href="#" id="alunosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-graduate me-2"></i>Alunos
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="turmasDropdown">
-                        <li><a class="dropdown-item" href="/admin/turmas/adicionar">Nova Turma</a></li>
-                        <li><a class="dropdown-item" href="/admin/turmas">Todas as Turmas</a></li>
-                        
+                    <ul class="dropdown-menu" aria-labelledby="alunosDropdown">
+                        <li><a class="dropdown-item" href="/admin/alunos/adicionar"><i class="fas fa-plus-circle me-2"></i>Novo Aluno</a></li>
+                        <li><a class="dropdown-item" href="/admin/alunos"><i class="fas fa-list me-2"></i>Todos os Alunos</a></li>
                     </ul>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/rematriculados">Rematriculados</a>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="turmasDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-book me-2"></i>Turmas
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="turmasDropdown">
+                        <li><a class="dropdown-item" href="/admin/turmas/adicionar"><i class="fas fa-plus-circle me-2"></i>Nova Turma</a></li>
+                        <li><a class="dropdown-item" href="/admin/turmas"><i class="fas fa-list-ol me-2"></i>Todas as Turmas</a></li>
+                    </ul>
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link" href="/growtechers">Grown TECHERS</a>
+                    <a class="nav-link" href="/growtechers">
+                        <i class="fas fa-chart-line me-2"></i>Grown TECHERS
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Profile dropdown and notifications -->
+            <ul class="navbar-nav ms-auto">
+               
                 </li>
             </ul>
         </div>
     </div>
 </nav>
-<div class="text-center mt-4">
-    <img src="https://techers.com.br/wp-content/uploads/2023/05/logo.png" alt="Logo TECHERS" class="img-fluid" style="max-width: 150px; height: auto;">
-</div>
+
+<style>
+    /* Modern Navbar Styling */
+    :root {
+        --primary: #6a1b9a;
+        --primary-light: #9c4dcc;
+        --primary-dark: #38006b;
+        --secondary: #2d2d2d;
+        --light: #f8f9fa;
+        --white: #ffffff;
+        --success: #28a745;
+        --warning: #ffc107;
+        --danger: #dc3545;
+    }
+    
+    /* Navbar Base */
+    .navbar {
+        background-color: var(--white);
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        padding: 0.75rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+    
+    .navbar-brand {
+        color: var(--primary) !important;
+        font-weight: 700;
+        font-size: 1.3rem;
+        letter-spacing: -0.5px;
+    }
+    
+    .brand-icon {
+    background-color: var(--primary);
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    overflow: hidden; /* Ensures the image stays within rounded corners */
+}
+
+.brand-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Maintains aspect ratio while fitting within container */
+    padding: 4px; /* Creates some spacing around the logo */
+    border-radius: 6px; /* Slightly smaller radius than container */
+}
+    
+    /* Navbar Toggle */
+    .navbar-toggler {
+        border: none;
+        padding: 0.5rem;
+        font-size: 1.25rem;
+        color: var(--primary);
+        border-radius: 8px;
+        background-color: rgba(106, 27, 154, 0.05);
+    }
+    
+    .navbar-toggler:focus {
+        box-shadow: 0 0 0 3px rgba(106, 27, 154, 0.25);
+    }
+    
+    /* Nav Links */
+    .nav-link {
+        color: var(--secondary);
+        font-weight: 500;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        margin: 0 0.15rem;
+        position: relative;
+    }
+    
+    .nav-link:hover, 
+    .nav-link:focus {
+        color: var(--primary);
+        background-color: rgba(106, 27, 154, 0.05);
+    }
+    
+    .nav-link.active {
+        color: var(--primary);
+        background-color: rgba(106, 27, 154, 0.08);
+        font-weight: 600;
+    }
+    
+    .nav-link i {
+        opacity: 0.75;
+    }
+    
+    /* Dropdowns */
+    .dropdown-menu {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        padding: 0.75rem 0;
+        margin-top: 0.5rem;
+        min-width: 14rem;
+    }
+    
+    .dropdown-item {
+        padding: 0.75rem 1.25rem;
+        color: var(--secondary);
+        font-weight: 500;
+        border-radius: 6px;
+        margin: 0 0.5rem;
+        width: calc(100% - 1rem);
+        transition: all 0.2s ease;
+    }
+    
+    .dropdown-item:hover,
+    .dropdown-item:focus {
+        background-color: rgba(106, 27, 154, 0.08);
+        color: var(--primary);
+    }
+    
+    .dropdown-header {
+        padding: 0.5rem 1.25rem;
+        color: var(--secondary);
+    }
+    
+    .dropdown-header h6 {
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+        color: var(--secondary);
+    }
+    
+    .dropdown-header span {
+        font-size: 0.8rem;
+        color: #6c757d;
+    }
+    
+    .dropdown-divider {
+        margin: 0.5rem 0;
+        opacity: 0.1;
+    }
+    
+    .dropdown-footer {
+        text-align: center;
+        padding: 0.75rem 1.25rem;
+    }
+    
+    .dropdown-footer a {
+        color: var(--primary);
+        font-weight: 500;
+        text-decoration: none;
+        font-size: 0.875rem;
+    }
+    
+    /* Notifications */
+    .nav-icon {
+        position: relative;
+        padding: 0.75rem;
+        font-size: 1.25rem;
+        color: var(--secondary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .nav-icon .badge {
+        position: absolute;
+        top: 0.3rem;
+        right: 0.3rem;
+        font-size: 0.65rem;
+        background-color: var(--primary);
+        color: white;
+        border-radius: 100px;
+        padding: 0.15rem 0.35rem;
+        min-width: 18px;
+        height: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .notifications-dropdown {
+        width: 320px;
+        padding: 0;
+    }
+    
+    .notification-item {
+        display: flex;
+        padding: 1rem 1.25rem;
+        gap: 1rem;
+        transition: all 0.2s ease;
+    }
+    
+    .notification-item:hover {
+        background-color: rgba(0,0,0,0.02);
+    }
+    
+    .notification-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        flex-shrink: 0;
+    }
+    
+    .notification-content {
+        flex-grow: 1;
+    }
+    
+    .notification-content h4 {
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+        color: var(--secondary);
+    }
+    
+    .notification-content p {
+        font-size: 0.8rem;
+        margin-bottom: 0.25rem;
+        color: #6c757d;
+    }
+    
+    .notification-content small {
+        font-size: 0.7rem;
+        color: #adb5bd;
+    }
+    
+    .bg-primary {
+        background-color: var(--primary) !important;
+    }
+    
+    /* User Profile */
+    .user-profile {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .avatar {
+        width: 36px;
+        height: 36px;
+        background-color: var(--primary);
+        color: white;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 500;
+        font-size: 1rem;
+    }
+    
+    /* Responsive */
+    @media (max-width: 992px) {
+        .navbar-collapse {
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            padding: 1rem;
+            position: absolute;
+            top: 70px;
+            left: 1rem;
+            right: 1rem;
+            z-index: 100;
+        }
+        
+        .nav-link {
+            padding: 0.875rem 1rem;
+            margin: 0.25rem 0;
+        }
+        
+        .user-profile {
+            margin-top: 0.5rem;
+            justify-content: center;
+        }
+    }
+</style>

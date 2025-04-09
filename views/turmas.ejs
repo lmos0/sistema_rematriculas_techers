@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,63 +7,810 @@
     <title>Lista de Turmas TECHERS</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6a1b9a;
+            --primary-light: #9c4dcc;
+            --primary-dark: #38006b;
+            --secondary: #2d2d2d;
+            --light: #f8f9fa;
+            --white: #ffffff;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --success: #28a745;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #eef1f5 100%);
+            font-family: 'Poppins', 'Segoe UI', system-ui, sans-serif;
+            color: var(--secondary);
+        }
+
+        .navbar {
+            background: var(--white) !important;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            color: var(--primary) !important;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .brand-icon {
+            background-color: var(--primary);
+            color: white;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+        
+        .page-header {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .page-title {
+            color: var(--primary);
+            font-weight: 700;
+            margin: 0;
+            font-size: 1.75rem;
+        }
+        
+        .stats-container {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .stat-card {
+            background: var(--white);
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        
+        .stat-icon {
+            background: rgba(106, 27, 154, 0.1);
+            color: var(--primary);
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .stat-text {
+            margin: 0;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .stat-value {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .table-container {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        
+        .data-table {
+            margin-bottom: 0;
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+        }
+
+        .data-table thead th {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            padding: 1rem 1rem;
+            border: none;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .data-table thead th:first-child {
+            border-top-left-radius: 12px;
+        }
+        
+        .data-table thead th:last-child {
+            border-top-right-radius: 12px;
+        }
+
+        .data-table tbody tr {
+            transition: all 0.2s ease;
+            border-bottom: 1px solid rgba(0,0,0,0.04);
+        }
+        
+        .data-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .data-table tbody td {
+            padding: 1rem;
+            vertical-align: middle;
+            font-size: 0.9rem;
+            color: var(--secondary);
+            border: none;
+        }
+        
+        .class-name {
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        .course-badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            background-color: rgba(106, 27, 154, 0.1);
+            color: var(--primary);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin: 0.15rem;
+        }
+        
+        .level-badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .modality-badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            background-color: rgba(255, 193, 7, 0.1);
+            color: #d99e00;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .weekday-badge {
+            display: inline-block;
+            padding: 0.4rem 0.75rem;
+            background-color: rgba(0, 123, 255, 0.1);
+            color: #0069d9;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .time-badge {
+            display: inline-block;
+            padding: 0.4rem 0.75rem;
+            background-color: rgba(108, 117, 125, 0.1);
+            color: #5a6268;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .vacancies-badge {
+            display: inline-block;
+            padding: 0.4rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .vacancies-available {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+        
+        .vacancies-limited {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: var(--warning);
+        }
+        
+        .vacancies-full {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+        }
+        
+        .btn {
+            border-radius: 8px;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+            border: none;
+        }
+        
+        .btn-sm {
+            padding: 0.35rem 0.75rem;
+            font-size: 0.85rem;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning);
+            color: var(--secondary);
+        }
+        
+        .btn-warning:hover {
+            background-color: #e5ac00;
+            color: var(--secondary);
+            transform: translateY(-1px);
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c82333;
+            transform: translateY(-1px);
+        }
+        
+        .action-cell {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+        
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            color: white;
+            transition: all 0.2s ease;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn-edit {
+            background-color: var(--warning);
+        }
+        
+        .btn-delete {
+            background-color: var(--danger);
+        }
+        
+        .btn-view {
+            background-color: var(--primary);
+        }
+        
+        .search-container {
+            position: relative;
+            max-width: 300px;
+            margin-left: auto;
+        }
+        
+        .search-input {
+            border: 2px solid rgba(106, 27, 154, 0.2);
+            border-radius: 100px;
+            padding: 0.5rem 1rem 0.5rem 2.5rem;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(106, 27, 154, 0.15);
+        }
+        
+        .search-icon {
+            position: absolute;
+            top: 50%;
+            left: 1rem;
+            transform: translateY(-50%);
+            color: var(--primary);
+        }
+        
+        .empty-state {
+            padding: 3rem 1rem;
+            text-align: center;
+        }
+        
+        .empty-icon {
+            font-size: 3rem;
+            color: rgba(106, 27, 154, 0.2);
+            margin-bottom: 1rem;
+        }
+        
+        .empty-text {
+            color: #6c757d;
+            font-size: 1.1rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .add-button {
+            background-color: var(--primary);
+            color: white;
+            border-radius: 100px;
+            padding: 0.6rem 1.2rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+        
+        .add-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            color: white;
+        }
+        
+        .filters-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-select {
+            border: 2px solid rgba(106, 27, 154, 0.2);
+            border-radius: 8px;
+            padding: 0.4rem 2rem 0.4rem 0.75rem;
+            font-size: 0.9rem;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236a1b9a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            background-size: 16px;
+            appearance: none;
+            -webkit-appearance: none;
+            transition: all 0.2s ease;
+        }
+        
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(106, 27, 154, 0.15);
+        }
+
+        /* Modal styling */
+        .modal-content {
+            border-radius: 16px;
+            border: none;
+            overflow: hidden;
+        }
+        
+        .modal-header {
+            background-color: var(--danger);
+            color: white;
+            border-bottom: none;
+        }
+        
+        .modal-body {
+            padding: 2rem;
+        }
+        
+        .modal-footer {
+            border-top: none;
+            padding: 1rem 2rem 2rem;
+        }
+        
+        /* Pagination styling */
+        .pagination {
+            margin-top: 2rem;
+        }
+        
+        .page-link {
+            border: none;
+            margin: 0 0.25rem;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            color: var(--primary);
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .page-link:hover {
+            background-color: rgba(106, 27, 154, 0.1);
+            color: var(--primary);
+            transform: translateY(-1px);
+        }
+        
+        .page-item.active .page-link {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .page-item.disabled .page-link {
+            color: #ced4da;
+            background-color: transparent;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 992px) {
+            .data-table {
+                min-width: 1000px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .search-container {
+                max-width: 100%;
+                width: 100%;
+                margin-top: 1rem;
+            }
+            
+            .stats-container {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .stat-card {
+                width: 100%;
+            }
+            
+            .filters-bar {
+                flex-direction: column;
+            }
+            
+            .filter-select {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Include Navbar -->
+    <!-- Navbar -->
     <%- include('includes/navbar') %>
-
-    <div class="container my-5">
-        <h1 class="text-center mb-4">Lista de Turmas TECHERS</h1>
-
-       
-
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped text-center">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Nome da Turma</th>
-                        <th>Curso</th>
-                        <th>Nível</th>
-                        <th>Modalidade</th>
-                        <th>Dia da Semana</th>
-                        <th>Horário</th>
-                        <th>Vagas</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% if (turmas.length > 0) { %>
-                        <% turmas.forEach(function(turma) { %>
-                            <tr>
-                                <td><%= turma.nome %></td>
-                                <td><%= turma.curso %></td>
-                                <td><%= turma.level %></td>
-                                <td><%= turma.modalidade %></td>
-                                <td><%= turma.dia_semana %></td>
-                                <td><%= turma.horario %></td>
-                                <td><%= turma.vagas %></td>
-                                <td>
-                                    <a href="/admin/turmas/editar/<%= turma.id %>" class="btn btn-warning btn-sm">Editar</a>
-                                    <form action="/admin/turmas/excluir/<%= turma.id %>"method="POST" class="d-inline" onsubmit="return confirm('Tem certeza que deseja excluir este aluno?')">
-                                        <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        <% }); %>
-                    <% } else { %>
-                        <tr>
-                            <td colspan="8" class="text-center">Nenhuma turma encontrada no sistema.</td>
-                        </tr>
-                    <% } %>
-                </tbody>
-            </table>
+    
+    <div class="container my-4">
+        <!-- Header Section -->
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Lista de Turmas</h1>
+            </div>
+            
+            <!-- Add Class Button -->
+            <a href="/admin/turmas/adicionar" class="add-button">
+                <i class="fas fa-plus"></i>
+                Nova Turma
+            </a>
+            
+            <!-- Search Bar -->
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" id="searchInput" placeholder="Buscar turma...">
+            </div>
+        </div>
+        
+        <!-- Filters Bar -->
+        <div class="filters-bar">
+            <select class="filter-select" id="cursoFilter">
+                <option value="">Todos os Cursos</option>
+                <option value="Robótica">Robótica</option>
+                <option value="Programação">Programação</option>
+          
+            </select>
+            
+            
+            <select class="filter-select" id="modalidadeFilter">
+                <option value="">Todas as Modalidades</option>
+                <option value="Presencial">Presencial</option>
+                <option value="Online">Online</option>
+                <option value="Híbrido">Híbrido</option>
+            </select>
+            
+            <select class="filter-select" id="diaFilter">
+                <option value="Terça">Terça</option>
+                <option value="Quarta">Quarta</option>
+                <option value="Quinta">Quinta</option>
+                <option value="Sexta">Sexta</option>
+                <option value="Sábado">Sábado</option>
+            </select>
+        </div>
+        
+        <!-- Stats Cards -->
+        <div class="stats-container mb-4">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-chalkboard"></i>
+                </div>
+                <p class="stat-text">Total de Turmas: <span class="stat-value"><%= turmas.length %></span></p>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <p class="stat-text">Vagas Disponíveis: <span class="stat-value" id="totalVagas">0</span></p>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-laptop-code"></i>
+                </div>
+                <p class="stat-text">Modalidade <span class="stat-value">Presencial: <span id="totalPresencial">0</span> | Online: <span id="totalOnline">0</span></span></p>
+            </div>
         </div>
 
-        <!-- Pagination controls -->
-       
+        <!-- Table Card -->
+        <div class="table-container">
+            <div class="table-responsive">
+                <table class="table data-table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Nome da Turma</th>
+                            <th>Curso</th>
+                            <th>Nível</th>
+                            <th>Modalidade</th>
+                            <th>Dia da Semana</th>
+                            <th>Horário</th>
+                            <th>Vagas</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (turmas && turmas.length > 0) { %>
+                            <% turmas.forEach(function(turma) { %>
+                                <tr>
+                                    <td class="class-name"><%= turma.nome %></td>
+                                    <td><span class="course-badge"><%= turma.curso %></span></td>
+                                    <td><span class="level-badge"><%= turma.level %></span></td>
+                                    <td><span class="modality-badge"><%= turma.modalidade %></span></td>
+                                    <td><span class="weekday-badge"><%= turma.dia_semana %></span></td>
+                                    <td><span class="time-badge"><%= turma.horario %></span></td>
+                                    <td>
+                                        <% 
+                                        let vagasClass = '';
+                                        if (turma.vagas > 5) {
+                                            vagasClass = 'vacancies-available';
+                                        } else if (turma.vagas > 0) {
+                                            vagasClass = 'vacancies-limited';
+                                        } else {
+                                            vagasClass = 'vacancies-full';
+                                        }
+                                        %>
+                                        <span class="vacancies-badge <%= vagasClass %>"><%= turma.vagas %></span>
+                                    </td>
+                                    <td>
+                                        <div class="action-cell">
+                                            <a href="/admin/turmas/visualizar/<%= turma.id %>" class="action-btn btn-view" title="Visualizar">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="/admin/turmas/editar/<%= turma.id %>" class="action-btn btn-edit" title="Editar">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <button type="button" class="action-btn btn-delete" 
+                                                    onclick="confirmarExclusao('<%= turma.id %>')" title="Excluir">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="8">
+                                    <div class="empty-state">
+                                        <div class="empty-icon">
+                                            <i class="fas fa-chalkboard"></i>
+                                        </div>
+                                        <p class="empty-text">Nenhuma turma encontrada no sistema. Adicione novas turmas para começar.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Pagination controls - Can be added if needed -->
+        <% if (typeof totalPages !== 'undefined' && totalPages > 1) { %>
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                <% if (currentPage > 1) { %>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=<%= currentPage - 1 %>" aria-label="Previous">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                    </li>
+                <% } else { %>
+                    <li class="page-item disabled">
+                        <span class="page-link"><i class="fas fa-chevron-left"></i></span>
+                    </li>
+                <% } %>
+                
+                <% 
+                let startPage = Math.max(1, currentPage - 2);
+                let endPage = Math.min(totalPages, startPage + 4);
+                
+                if (endPage - startPage < 4) {
+                    startPage = Math.max(1, endPage - 4);
+                }
+                
+                for(let i = startPage; i <= endPage; i++) { 
+                %>
+                    <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                        <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                    </li>
+                <% } %>
+                
+                <% if (currentPage < totalPages) { %>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=<%= currentPage + 1 %>" aria-label="Next">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </li>
+                <% } else { %>
+                    <li class="page-item disabled">
+                        <span class="page-link"><i class="fas fa-chevron-right"></i></span>
+                    </li>
+                <% } %>
+            </ul>
+        </nav>
+        <% } %>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar Exclusão</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body py-4">
+                    <div class="text-center mb-3">
+                        <i class="fas fa-exclamation-triangle text-danger" style="font-size: 3rem;"></i>
+                    </div>
+                    <p class="text-center fs-5">Tem certeza que deseja excluir esta turma?</p>
+                    <p class="text-center text-muted">Esta ação não poderá ser desfeita.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <form id="deleteForm" action="" method="post">
+                        <button type="submit" class="btn btn-danger">Excluir</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Function to prepare and show the delete confirmation modal
+        function confirmarExclusao(id) {
+            document.getElementById('deleteForm').action = '/admin/turmas/excluir/' + id;
+            const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+            deleteModal.show();
+        }
+        
+        // Calculate and display stats when document loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Calculate total vacancies
+            let totalVagas = 0;
+            let totalPresencial = 0;
+            let totalOnline = 0;
+            
+            const rows = document.querySelectorAll('.data-table tbody tr');
+            rows.forEach(row => {
+                // Skip the empty state row if exists
+                if (!row.querySelector('.empty-state')) {
+                    // Count vacancies
+                    const vagas = parseInt(row.querySelector('.vacancies-badge').textContent) || 0;
+                    totalVagas += vagas;
+                    
+                    // Count modalities
+                    const modalidade = row.cells[3].textContent.trim();
+                    if (modalidade.includes('Presencial')) {
+                        totalPresencial++;
+                    }
+                    if (modalidade.includes('Online')) {
+                        totalOnline++;
+                    }
+                }
+            });
+            
+            // Update stats display
+            document.getElementById('totalVagas').textContent = totalVagas;
+            document.getElementById('totalPresencial').textContent = totalPresencial;
+            document.getElementById('totalOnline').textContent = totalOnline;
+            
+            // Search and Filter functionality
+            const searchInput = document.getElementById('searchInput');
+            const cursoFilter = document.getElementById('cursoFilter');
+            const levelFilter = document.getElementById('levelFilter');
+            const modalidadeFilter = document.getElementById('modalidadeFilter');
+            const diaFilter = document.getElementById('diaFilter');
+            
+            // Function to filter table rows
+            function filterTable() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const cursoValue = cursoFilter.value;
+                const levelValue = levelFilter.value;
+                const modalidadeValue = modalidadeFilter.value;
+                const diaValue = diaFilter.value;
+                
+                rows.forEach(row => {
+                    // Skip the empty state row if exists
+                    if (!row.querySelector('.empty-state')) {
+                        const nome = row.cells[0].textContent.toLowerCase();
+                        const curso = row.cells[1].textContent;
+                        const level = row.cells[2].textContent;
+                        const modalidade = row.cells[3].textContent;
+                        const dia = row.cells[4].textContent;
+                        
+                        // Apply all filters
+                        const matchesSearch = nome.includes(searchTerm);
+                        const matchesCurso = cursoValue === '' || curso.includes(cursoValue);
+                        const matchesLevel = levelValue === '' || level.includes(levelValue);
+                        const matchesModalidade = modalidadeValue === '' || modalidade.includes(modalidadeValue);
+                        const matchesDia = diaValue === '' || dia.includes(diaValue);
+                        
+                        // Show/hide row based on filter results
+                        if (matchesSearch && matchesCurso && matchesLevel && matchesModalidade && matchesDia) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    }
+                });
+            }
+            
+            // Add event listeners to inputs
+            searchInput.addEventListener('input', filterTable);
+            cursoFilter.addEventListener('change', filterTable);
+            levelFilter.addEventListener('change', filterTable);
+            modalidadeFilter.addEventListener('change', filterTable);
+            diaFilter.addEventListener('change', filterTable);
+        });
+    </script>
 </body>
 </html>

@@ -4,152 +4,254 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="icon-red.svg" type="image/svg+xml">
-    <title>Confirmar Rematrícula</title>
+    <title>Confirmar Rematrícula TECHERS</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #6a1b9a;
+            --primary-light: #9c4dcc;
+            --primary-dark: #38006b;
+            --secondary: #2d2d2d;
+            --light: #f8f9fa;
+            --white: #ffffff;
+            --danger: #dc3545;
+        }
+
         body {
-            background-color: #f8f9fa;
+            background: linear-gradient(135deg, #f5f7fa 0%, #eef1f5 100%);
+            font-family: 'Poppins', 'Segoe UI', system-ui, sans-serif;
+            color: var(--secondary);
         }
-        .card {
+
+        .form-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem auto;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            max-width: 800px;
+        }
+
+        .form-title {
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            font-size: 1.75rem;
+        }
+
+        .form-control, .form-select {
+            border: 2px solid rgba(106, 27, 154, 0.1);
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 0.75rem 1rem;
+            transition: all 0.2s ease;
         }
-        .form-section-title {
-            font-weight: bold;
-            color: #343a40;
-            margin-top: 1.5rem;
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(106, 27, 154, 0.15);
         }
-        .btn-primary {
+
+        .form-label {
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .student-info-card {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+            margin-bottom: 2rem;
+        }
+
+        .student-info-item {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            font-size: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
         }
-        .modal-header, .modal-footer {
-            background-color: #f8f9fa;
+
+        .student-info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .info-value {
+            color: var(--secondary);
+            font-weight: 400;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .modal-header {
+            background-color: var(--primary);
+            color: white;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .modal-content {
+            border-radius: 16px;
+            border: none;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+
+        .spinner-border {
+            width: 1.2rem;
+            height: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .form-card {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
     <%- include('includes/navbarpais') %>
 
-    <div class="container my-5">
-        <h3 class="text-center mt-4">Confirmar Rematrícula</h3>
-        <p class="text-center text-muted">Confira e confirme as informações para 2025</p>
+    <div class="container my-4">
+        <div class="form-card">
+            <h1 class="form-title text-center">Confirmar Rematrícula 2026</h1>
+            <p class="text-center text-muted mb-4">Confira e confirme as informações para o próximo ano letivo</p>
 
-        <div class="card mb-4">
-            <div class="card-body">
-                <h3 class="card-title text-center"><%= aluno.nome_aluno %></h3>
-                <ul class="list-unstyled">
-                    <li><strong>Responsável:</strong> <%= aluno.nome_responsavel %></li>
-                    <li><strong>CPF do Responsável:</strong> <%= aluno.cpf_responsavel %></li>
-                    <li><strong>Idade: <%= aluno.idade %></strong></li>
-                    <li><strong>Valor do curso para 2025:</strong> <%= aluno.valor_2025.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %> (Em até 12x sem juros)</li>
-                    <li><strong>Curso Atual:</strong> <%= aluno.curso %></li>
-                    <li style="color: red;"><strong>Modalidade:</strong> <%= aluno.modalidade %></li>
-
-                    <% if (aluno.segundo_curso) { %>
-                        <li><strong>Segundo Curso:</strong> <%= aluno.segundo_curso %></li>
-                        <li style="color: red;"><strong>Modalidade segundo curso:</strong> <%= aluno.modalidade_segundo_curso %></li>
-                        
-                     
-                    <% } %>
-                </ul>
-            </div>
-        </div>
-
-        <form action="" method="post" id="rematriculaForm">
-            <h5 class="form-section-title text-center">Turma de <%= aluno.curso %></h5>
-            <div class="mb-3">
-                <label for="turma_2025" class="form-label">Turma</label>
-                <select name="turma_2025" id="turma_2025" class="form-select" required>
-                    <option disabled selected>Selecione a Turma para 2025</option>
-                    <% turmas_possiveis.forEach(function(turma) { %>
-                        <option value="<%= turma.id %>"><%= turma.curso  + ' - ' + turma.dia_semana + ' - ' + turma.horario%></option>
-                    <% }); %>
-                </select>
+            <!-- Student Info -->
+            <div class="student-info-card">
+                <div class="student-info-item">
+                    <span class="info-label">Aluno:</span>
+                    <span class="info-value"><%= aluno.nome_aluno %></span>
+                </div>
+                <div class="student-info-item">
+                    <span class="info-label">Responsável:</span>
+                    <span class="info-value"><%= aluno.nome_responsavel %></span>
+                </div>
+                <div class="student-info-item">
+                    <span class="info-label">Valor 2026:</span>
+                    <span class="info-value text-primary fw-bold">
+                        <%= aluno.valor_2025.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %>
+                    </span>
+                </div>
             </div>
 
-            <% if (aluno.segundo_curso) { %>
-                <h5 class="form-section-title text-center">Turma de <%= aluno.segundo_curso %></h5>
-                <div class="mb-3">
-                    <label for="turma_2025_segundo_curso" class="form-label">Turma</label>
-                    <select name="turma_2025_segundo_curso" id="turma_2025_segundo_curso" class="form-select" required>
-                        <option disabled selected>Selecione a Turma para 2025</option>
-                        <% turmas_possiveis_segundo_curso.forEach(function(turma) { %>
-                            <option value="<%= turma.id %>"><%= turma.curso  + ' - ' + turma.dia_semana + ' - ' + turma.horario%></option>
+            <!-- Enrollment Form -->
+            <form action="" method="post" id="rematriculaForm">
+                <!-- Course Selection -->
+                <div class="mb-4">
+                    <label for="turma_2025" class="form-label">Turma <%= aluno.curso %></label>
+                    <select name="turma_2025" id="turma_2025" class="form-select" required>
+                        <option disabled selected>Selecione a Turma</option>
+                        <% turmas_possiveis.forEach(function(turma) { %>
+                            <option value="<%= turma.id %>">
+                                <%= turma.dia_semana %> - <%= turma.horario %>
+                            </option>
                         <% }); %>
                     </select>
-            <% } %>
+                </div>
 
-            <h5 class="form-section-title text-center">Quantidade de Parcelas</h5>
-            <div class="mb-3">
-                <label for="parcelas" class="form-label">Parcelamento em até 12x</label>
-                <select class="form-select" name="quantidade_parcelas" id="parcelas" required>
-                    <option value="" disabled selected>Selecione a quantidade de parcelas</option>
-                    <% for (let i = 1; i <= 12; i++) { %>
-                        <option value="<%= i %>"> <%= i + 'x ' + ' de'%> <%=  (aluno.valor_2025 / i).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %></option>
-                    <% } %>
-                </select>
-            </div>
+                <% if (aluno.segundo_curso) { %>
+                    <div class="mb-4">
+                        <label for="turma_2025_segundo_curso" class="form-label">Turma <%= aluno.segundo_curso %></label>
+                        <select name="turma_2025_segundo_curso" id="turma_2025_segundo_curso" class="form-select" required>
+                            <option disabled selected>Selecione a Turma</option>
+                            <% turmas_possiveis_segundo_curso.forEach(function(turma) { %>
+                                <option value="<%= turma.id %>">
+                                    <%= turma.dia_semana %> - <%= turma.horario %>
+                                </option>
+                            <% }); %>
+                        </select>
+                    </div>
+                <% } %>
 
-            <h5 class="form-section-title text-center">Forma de Pagamento</h5>
-            <div class="mb-3">
-                <label for="forma_de_pagamento" class="form-label">Forma de Pagamento</label>
-                <select name="forma_de_pagamento" id="forma_de_pagamento" class="form-select" required>
-                    <option value="" disabled selected>Selecione Forma de Pagamento</option>
-                    <option value="Boleto Bancário">Boleto Bancário</option>
-                    <option value="Cartão de Crédito">Cartão de Crédito</option>
-                    <option value="Transferência Bancária">Transferência Bancária</option>
-                </select>
-            </div>
+                <!-- Payment Details -->
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label for="parcelas" class="form-label">Parcelamento</label>
+                        <select class="form-select" name="quantidade_parcelas" id="parcelas" required>
+                            <option value="" disabled selected>Número de parcelas</option>
+                            <% for (let i = 1; i <= 12; i++) { %>
+                                <option value="<%= i %>">
+                                    <%= i %>x de <%= (aluno.valor_2025 / i).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %>
+                                </option>
+                            <% } %>
+                        </select>
+                    </div>
 
-            <!-- Buttons Section -->
-            <div class="d-flex justify-content-between mt-4">
-                <!-- Back Button -->
-                <button type="button" class="btn btn-secondary" onclick="history.back();">Voltar</button>
+                    <div class="col-md-6">
+                        <label for="forma_de_pagamento" class="form-label">Forma de Pagamento</label>
+                        <select name="forma_de_pagamento" id="forma_de_pagamento" class="form-select" required>
+                            <option value="" disabled selected>Selecione</option>
+                            <option value="Boleto Bancário">Boleto Bancário</option>
+                            <option value="Cartão de Crédito">Cartão de Crédito</option>
+                            <option value="Transferência Bancária">Transferência Bancária</option>
+                        </select>
+                    </div>
+                </div>
 
-                <!-- Confirm Button with Modal Trigger -->
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmationModal">
-                    <span>Confirmar Rematrícula</span>
-                </button>
-            </div>
+                <!-- Action Buttons -->
+                <div class="d-flex justify-content-between mt-5">
+                    <button type="button" class="btn btn-outline-secondary" onclick="history.back();">
+                        <i class="fas fa-arrow-left me-2"></i>Voltar
+                    </button>
+                    
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmationModal">
+                        <i class="fas fa-check-circle me-2"></i>Confirmar
+                    </button>
+                </div>
 
-            <!-- Confirmation Modal -->
-            <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="confirmationModalLabel">Confirmar Rematrícula</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            Tem certeza de que deseja confirmar a rematrícula para <strong><%= aluno.nome_aluno %></strong>?
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary" form="rematriculaForm">
-                                <span>Confirmar</span>
-                                <div class="spinner-border spinner-border-sm text-light d-none" role="status"></div>
-                            </button>
+                <!-- Confirmation Modal -->
+                <div class="modal fade" id="confirmationModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Confirmação Final</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body text-center py-4">
+                                <i class="fas fa-exclamation-circle text-primary fs-1 mb-3"></i>
+                                <p class="fs-5">Confirmar rematrícula para<br><strong><%= aluno.nome_aluno %></strong>?</p>
+                            </div>
+                            <div class="modal-footer border-0">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-primary">
+                                    <span>Confirmar</span>
+                                    <div class="spinner-border spinner-border-sm text-light d-none" role="status"></div>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // document.getElementById('rematriculaForm').addEventListener('submit', function() {
-        //     const spinner = document.querySelector('.spinner-border');
-        //     const button = document.querySelector('.btn-primary');
-        //     spinner.classList.remove('d-none');
-        //     button.disabled = true;
-        // });
+        document.getElementById('rematriculaForm').addEventListener('submit', function(e) {
+            const submitButton = this.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.querySelector('.spinner-border').classList.remove('d-none');
+        });
     </script>
 </body>
 </html>

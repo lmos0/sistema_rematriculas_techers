@@ -8,53 +8,138 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        :root {
+            --bs-primary: #6a1b9a;
+            --bs-primary-dark: #4a126b;
+            --bs-secondary: #000000;
+            --bs-light-bg: rgba(106, 27, 154, 0.1);
+        }
+
         body {
             background-color: #f8f9fa;
+            font-family: 'Segoe UI', system-ui, sans-serif;
         }
+
+        .navbar {
+            background-color: var(--bs-primary) !important;
+            border-bottom: 3px solid var(--bs-secondary);
+        }
+
         .card {
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 2px solid var(--bs-primary);
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
+
         .form-section-title {
-            font-weight: bold;
-            color: #343a40;
-            margin-top: 1.5rem;
+            color: var(--bs-primary);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 2rem 0 1rem;
+            position: relative;
+            padding-bottom: 0.5rem;
         }
+
+        .form-section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background: var(--bs-primary);
+        }
+
         .btn-primary {
+            background-color: var(--bs-primary);
+            border: none;
+            padding: 0.75rem 2rem;
+            transition: all 0.3s ease;
+            min-width: 180px;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--bs-primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .form-select {
+            border: 2px solid #eceef1;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+        }
+
+        .form-select:focus {
+            border-color: var(--bs-primary);
+            box-shadow: 0 0 0 0.25rem rgba(106, 27, 154, 0.25);
+        }
+
+        .list-unstyled li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            font-size: 1rem;
+        }
+
+        .list-unstyled li strong {
+            color: var(--bs-secondary);
+            min-width: 160px;
+        }
+
+        .text-muted {
+            color: #6c757d !important;
         }
     </style>
 </head>
 <body>
     <%- include('includes/navbarpais') %>
 
-    <h3 class="text-center mt-4">Confirmar Rematrícula</h3>
-    <p class="text-center text-muted">Confira e confirme as informações para 2025</p>
-
     <div class="container my-5">
+        <h3 class="text-center mt-4 fw-bold text-primary">Confirmar Modalidade 2026</h3>
+        <p class="text-center text-muted mb-4">Selecione a modalidade de ensino para cada curso</p>
+
+        <!-- Student Info Card -->
         <div class="card mb-4">
             <div class="card-body">
-                <h3 class="card-title text-center"><%= aluno.nome_aluno %></h3>
+                <h3 class="card-title text-center mb-4"><%= aluno.nome_aluno %></h3>
                 <ul class="list-unstyled">
-                    <li><strong>Responsável:</strong> <%= aluno.nome_responsavel %></li>
-                    <li><strong>CPF do Responsável:</strong> <%= aluno.cpf_responsavel %></li>
-                    <li><strong>Valor do curso para 2025:</strong> <%= aluno.valor_2025.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %> (Em até 12x sem juros)</li>
-                    <li><strong>Curso Atual:</strong> <%= aluno.curso %></li>
+                    <li>
+                        <strong>Responsável:</strong>
+                        <span><%= aluno.nome_responsavel %></span>
+                    </li>
+                    <li>
+                        <strong>CPF Responsável:</strong>
+                        <span><%= aluno.cpf_responsavel %></span>
+                    </li>
+                    <li>
+                        <strong>Valor Total:</strong>
+                        <span class="fw-bold text-primary">
+                            <%= aluno.valor_2025.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %>
+                        </span>
+                    </li>
+                    <li>
+                        <strong>Curso Principal:</strong>
+                        <span><%= aluno.curso %></span>
+                    </li>
                     <% if (aluno.segundo_curso) { %>
-                        <li><strong>Segundo Curso:</strong> <%= aluno.segundo_curso %></li>
+                        <li>
+                            <strong>Segundo Curso:</strong>
+                            <span><%= aluno.segundo_curso %></span>
+                        </li>
                     <% } %>
                 </ul>
             </div>
         </div>
 
-        <form action="" method="post">
-            <h5 class="form-section-title">Modalidade de Ensino - Curso de <%= aluno.curso %> </h5>
-            <div class="mb-3">
-                <label for="modalidade" class="form-label">Escolha a modalidade das aulas para 2025</label>
+        <!-- Enrollment Form -->
+        <form action="" method="post" id="modalidadeForm">
+            <!-- Main Course Modality -->
+            <h5 class="form-section-title text-center"><%= aluno.curso %></h5>
+            <div class="mb-4">
+                <label for="modalidade" class="form-label fw-medium">Modalidade de Ensino</label>
                 <select name="modalidade" id="modalidade" class="form-select" required>
                     <% if (aluno.curso === 'Maker' || aluno.curso === 'Robótica') { %>
                         <option value="Presencial">Presencial</option>
@@ -64,11 +149,11 @@
                     <% } %>
                 </select>
             </div>
-        
+
             <% if (aluno.segundo_curso) { %>
-                <h5 class="form-section-title">Modalidade de Ensino - Curso de <%= aluno.segundo_curso %> </h5>
-                <div class="mb-3">
-                    <label for="modalidade_segundo_curso" class="form-label">Escolha a modalidade das aulas para 2025</label>
+                <h5 class="form-section-title text-center"><%= aluno.segundo_curso %></h5>
+                <div class="mb-4">
+                    <label for="modalidade_segundo_curso" class="form-label fw-medium">Modalidade de Ensino</label>
                     <select name="modalidade_segundo_curso" id="modalidade_segundo_curso" class="form-select" required>
                         <% if (aluno.segundo_curso === 'Maker' || aluno.segundo_curso === 'Robótica') { %>
                             <option value="Presencial">Presencial</option>
@@ -79,19 +164,16 @@
                     </select>
                 </div>
             <% } %>
-        
-         
-      
 
-            <!-- Buttons Section -->
-            <div class="d-flex justify-content-between mt-4">
-                <!-- Back Button -->
-                <button type="button" class="btn btn-secondary" onclick="history.back();">Voltar</button>
-
-                <!-- Confirm Button with Spinner -->
+            <!-- Action Buttons -->
+            <div class="d-flex justify-content-between mt-5">
+                <button type="button" class="btn btn-outline-secondary" onclick="history.back();">
+                    Voltar
+                </button>
+                
                 <button type="submit" class="btn btn-primary">
-                    <span>Confirmar</span>
-                    <div class="spinner-border spinner-border-sm text-light d-none" role="status"></div>
+                    Confirmar Escolhas
+                    <span class="ms-2 spinner-border spinner-border-sm text-light d-none" role="status"></span>
                 </button>
             </div>
         </form>
@@ -100,12 +182,11 @@
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // document.querySelector('form').addEventListener('submit', function() {
-        //     const spinner = document.querySelector('.spinner-border');
-        //     const button = document.querySelector('.btn-primary');
-        //     spinner.classList.remove('d-none');
-        //     button.disabled = true;
-        // });
+        document.getElementById('modalidadeForm').addEventListener('submit', function(e) {
+            const submitButton = this.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.querySelector('.spinner-border').classList.remove('d-none');
+        });
     </script>
 </body>
 </html>

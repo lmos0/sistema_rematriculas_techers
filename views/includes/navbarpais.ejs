@@ -1,26 +1,81 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/">Rematrículas TECHERS</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm border-bottom border-3 border-black">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="/">
+            <span class="d-lg-none">TECHERS</span>
+            <span class="d-none d-lg-block">Rematrículas TECHERS</span>
+        </a>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            
-            <ul class="navbar-nav">
+
+        <div class="collapse navbar-collapse justify-content-between" id="mainNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Home</a>
+                    <a class="nav-link active" href="/">
+                        <i class="bi bi-house-door me-1"></i>Home
+                    </a>
                 </li>
-                <li class="nav-bar">
-                    <a class="nav-link" href="/faq">FAQ</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="/faq">
+                        <i class="bi bi-question-circle me-1"></i>FAQ
+                    </a>
                 </li>
-                <li class="nav-bar">
-                    <a class="nav-link"  href="http://techers.com.br" target="_blank">TECHERS</a>
-                </li>
-            
+                
             </ul>
+
+            <div class="d-lg-none text-center my-3">
+                <img src="https://techers.com.br/wp-content/uploads/2023/05/logo.png" 
+                     alt="TECHERS Logo" 
+                     class="brand-logo"
+                     style="max-width: 130px;"
+                     >
+            </div>
+        </div>
+
+        <div class="d-none d-lg-block">
+            <a href="https://techers.com.br"><img src="https://techers.com.br/wp-content/uploads/2023/05/logo.png" 
+                alt="TECHERS Logo" 
+                class="brand-logo"
+                style="max-width: 150px;"></a>
+            
         </div>
     </div>
 </nav>
-<div class="text-center mt-4">
-    <img src="https://techers.com.br/wp-content/uploads/2023/05/logo.png" alt="Logo TECHERS" class="img-fluid" style="max-width: 150px; height: auto;">
-</div>
+
+<style>
+    .navbar {
+        background-color: #6a1b9a !important;
+        padding: 0.8rem 0;
+    }
+
+    .nav-link {
+        padding: 0.75rem 1.25rem;
+        transition: all 0.3s ease;
+        border-radius: 8px;
+        margin: 0 0.25rem;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+        background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .brand-logo {
+        transition: transform 0.3s ease;
+        height: auto;
+    }
+
+    .brand-logo:hover {
+        transform: scale(1.05);
+    }
+
+    .bi {
+        font-size: 1.1em;
+        vertical-align: middle;
+    }
+
+    .border-black {
+        border-color: #000 !important;
+    }
+</style>

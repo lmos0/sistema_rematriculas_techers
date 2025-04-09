@@ -11,6 +11,17 @@ function removeAccents(str) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
+const calcularIdade = (dataNascimento) => {
+    const hoje = new Date();
+    const nascimento = new Date(dataNascimento);
+    let idade = hoje.getFullYear() - nascimento.getFullYear();
+    const mes = hoje.getMonth() - nascimento.getMonth();
+    if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
+        idade--;
+    }
+    return idade;
+};
+
 async function addAluno(req,res){
     const {nome_aluno,
          nome_responsavel, 
@@ -180,25 +191,27 @@ async function postEditAluno(req, res) {
         segundo_curso
     } = req.body;
 
-    const nome_aluno_busca = removeAccents(req.body.nome_aluno).toLowerCase();
-    const taxa_reajuste = (Number(req.body.reajuste) / 100) + 1;
+    // Preparação de dados
+    const nome_aluno_busca = removeAccents(nome_aluno).toLowerCase();
+    const taxa_reajuste = (Number(reajuste) / 100) + 1;
     const level_2025 = curso !== 'Programação' ? 2 : Number(level_atual) + 1;
     const valor_2025 = (valor_2024 * taxa_reajuste) * quantidade_parcelas_2024;
 
+    // Validação dos campos obrigatórios
     if (!nome_aluno || !nome_responsavel || !cpf_responsavel || !curso || !level_atual || !valor_2024 || !data_de_nascimento || !quantidade_parcelas_2024) {
-        req.flash('error', 'Todos os campos são obrigatórios')
+        req.flash('error', 'Todos os campos são obrigatórios');
         return res.status(400).redirect(`/admin/alunos/editar/${req.params.id}`);
     }
 
     try {
-        // Find the existing student by a unique identifier (e.g., cpf_responsavel)
-        const alunoExistente = await Aluno.findOne({ where:{nome_aluno} });
+        // Busca o aluno pelo ID para garantir que o registro correto será atualizado
+        const alunoExistente = await Aluno.findByPk(req.params.id);
 
         if (!alunoExistente) {
             return res.status(404).json({ error: 'Aluno não encontrado' });
         }
 
-        // Update the existing record
+        // Atualiza os dados do aluno
         alunoExistente.nome_aluno = nome_aluno;
         alunoExistente.nome_aluno_busca = nome_aluno_busca;
         alunoExistente.nome_responsavel = nome_responsavel;
@@ -212,7 +225,10 @@ async function postEditAluno(req, res) {
         alunoExistente.taxa_reajuste = reajuste;
         alunoExistente.segundo_curso = segundo_curso;
 
-        // Save the updated record
+        // Recalcula a idade com base na nova data de nascimento
+        alunoExistente.idade = calcularIdade(data_de_nascimento);
+
+        // Salva as alterações no banco de dados
         await alunoExistente.save();
 
         console.log('Aluno Updated:', alunoExistente);
@@ -222,7 +238,6 @@ async function postEditAluno(req, res) {
         return res.status(500).json({ error: err.message });
     }
 }
-
     
 
 async function getTurmas(req,res){

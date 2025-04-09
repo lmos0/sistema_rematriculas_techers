@@ -1,101 +1,226 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="icon-red.svg" type="image/svg+xml">
-    <title>Adicionar Turmas</title>
+    <title>Adicionar Turmas TECHERS</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6a1b9a;
+            --primary-light: #9c4dcc;
+            --primary-dark: #38006b;
+            --secondary: #2d2d2d;
+            --light: #f8f9fa;
+            --white: #ffffff;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --success: #28a745;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #eef1f5 100%);
+            font-family: 'Poppins', 'Segoe UI', system-ui, sans-serif;
+            color: var(--secondary);
+        }
+
+        .form-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem auto;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            max-width: 800px;
+        }
+
+        .form-title {
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 2rem;
+            font-size: 1.75rem;
+        }
+
+        .form-control {
+            border: 2px solid rgba(106, 27, 154, 0.1);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(106, 27, 154, 0.15);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .invalid-feedback {
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .select-icon {
+            position: relative;
+        }
+
+        .select-icon::after {
+            content: "\f078";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+            pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+            .form-card {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Include Navbar -->
     <%- include('includes/navbar') %>
 
     <div class="container my-5">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card shadow-sm p-4">
-                    <h2 class="card-title text-center mb-4">Adicionar Nova Turma</h2>
-                    <form action="/admin/turmas" method="POST">
-                        <div class="mb-3">
-                            <label for="nome" class="form-label">Nome da Turma</label>
-                            <input type="text" class="form-control" name="nome" id="nome" placeholder="Digite o nome da turma" required>
-                        </div>
+        <div class="form-card">
+            <h1 class="form-title text-center">Adicionar Nova Turma</h1>
+            
+            <form action="/admin/turmas" method="POST" class="needs-validation" novalidate>
+                <div class="row g-4">
+                    <div class="col-12">
+                        <label for="nome" class="form-label">Nome da Turma</label>
+                        <input type="text" class="form-control" name="nome" id="nome" 
+                               placeholder="Ex: Turma de Programação - Nível 1" required>
+                        <div class="invalid-feedback">Por favor, insira o nome da turma</div>
+                    </div>
 
-                        <div class="mb-3">
-                            <label for="curso" class="form-label">Curso</label>
-                            <select name="curso" id="" class="form-select" required>
-                                <option value="Programação">Programação</option>
-                                <option value="Robótica">Robótica</option>
-                                <option value="Animação Digital">Animação Digital</option>
-                                <option value="Maker">Maker</option>
-                                <option value="Design Gráfico">Design Gráfico</option>
-                                <option value="Video Making">Video Making</option>
-                                
-                            </select>
-                        </div>
+                    <div class="col-md-6">
+                        <label for="curso" class="form-label">Curso</label>
+                        <select name="curso" class="form-select" required>
+                            <option value="">Selecione o curso</option>
+                            <option value="Programação">Programação</option>
+                            <option value="Robótica">Robótica</option>
+                            <option value="Animação Digital">Animação Digital</option>
+                            <option value="Maker">Maker</option>
+                            <option value="Design Gráfico">Design Gráfico</option>
+                            <option value="Video Making">Video Making</option>
+                        </select>
+                        <div class="invalid-feedback">Selecione o curso</div>
+                    </div>
 
-                        <div class="mb-3">
-                            <label for="level" class="form-label">Level</label>
-                            <input type="number" class="form-control" name="level" id="level" placeholder="Digite o Level da turma" required min="1" max="8">
-                        </div>
+                    <div class="col-md-6">
+                        <label for="level" class="form-label">Level</label>
+                        <input type="number" class="form-control" name="level" id="level" 
+                               min="1" max="8" placeholder="Nível entre 1 e 8" required>
+                        <div class="invalid-feedback">Insira um nível válido (1-8)</div>
+                    </div>
 
-                        <div class="mb-3">
-                            <label for="faixa_etaria" class="form-label">Faixa Etária</label>
-                            <select name="faixa_etaria" id="faixa_etaria" class="form-select" required>
-                                <option value="" disabled >Selecione a Faixa Etária da Turma</option>
-                                <option value="kids">Kids (6 - 8 anos)</option>
-                                <option value="jr1">JR1 (8 - 10 anos)</option>
-                                <option value="jr2">JR2 (10 - 12 anos)</option>
-                                <option value="teens">Teens (13 - 17 anos)</option>
-                                <option value="adulto">Adulto (18+ anos)</option>
-                            </select>
-                        </div>
+                    <div class="col-md-6">
+                        <label for="faixa_etaria" class="form-label">Faixa Etária</label>
+                        <select name="faixa_etaria" class="form-select" required>
+                            <option value="">Selecione a faixa etária</option>
+                            <option value="kids">Kids (6 - 8 anos)</option>
+                            <option value="jr1">JR1 (8 - 10 anos)</option>
+                            <option value="jr2">JR2 (10 - 12 anos)</option>
+                            <option value="teens">Teens (13 - 17 anos)</option>
+                            <option value="adulto">Adulto (18+ anos)</option>
+                        </select>
+                        <div class="invalid-feedback">Selecione a faixa etária</div>
+                    </div>
 
-                        <div class="mb-3">
-                            <label for="modalidade" class="form-label">Modalidade</label>
-                            <select name="modalidade" id="modalidade" class="form-select" required>
-                                <option value="" disabled >Selecione a Modalidade da Turma</option>
-                                <option value="Presencial">Presencial</option>
-                                <option value="Online">Online</option>
-                                <option value="Híbrida">Híbrida</option>
-                            </select>
-                        </div>
+                    <div class="col-md-6">
+                        <label for="modalidade" class="form-label">Modalidade</label>
+                        <select name="modalidade" class="form-select" required>
+                            <option value="">Selecione a modalidade</option>
+                            <option value="Presencial">Presencial</option>
+                            <option value="Online">Online</option>
+                            <option value="Híbrida">Híbrida</option>
+                        </select>
+                        <div class="invalid-feedback">Selecione a modalidade</div>
+                    </div>
 
-                        <div class="mb-3">
-                            <label for="dia_semana" class="form-label">Dia da Semana</label>
-                            <select class="form-select" name="dia_semana" id="dia_semana" required>
-                                <option value="" disabled>Selecione o Dia da Semana</option>
-                                <option value="Terça-feira">Terça-feira</option>
-                                <option value="Quarta-feira">Quarta-feira</option>
-                                <option value="Quinta-feira">Quinta-feira</option>
-                                <option value="Sexta-feira">Sexta-feira</option>
-                                <option value="Sábado">Sábado</option>
-        
-                            </select>
-                        </div>
+                    <div class="col-md-6">
+                        <label for="dia_semana" class="form-label">Dia da Semana</label>
+                        <select class="form-select" name="dia_semana" required>
+                            <option value="">Selecione o dia</option>
+                            <option value="Terça-feira">Terça-feira</option>
+                            <option value="Quarta-feira">Quarta-feira</option>
+                            <option value="Quinta-feira">Quinta-feira</option>
+                            <option value="Sexta-feira">Sexta-feira</option>
+                            <option value="Sábado">Sábado</option>
+                        </select>
+                        <div class="invalid-feedback">Selecione o dia da semana</div>
+                    </div>
 
-                        <div class="mb-3">
-                            <label for="horario" class="form-label">Horário</label>
-                            <input type="time" class="form-control" name="horario" id="horario" required>
-                        </div>
+                    <div class="col-md-6">
+                        <label for="horario" class="form-label">Horário</label>
+                        <input type="time" class="form-control" name="horario" id="horario" required>
+                        <div class="invalid-feedback">Insira o horário</div>
+                    </div>
 
-                        <div class="mb-3">
-                            <label for="vagas" class="form-label">Vagas Disponíveis</label>
-                            <input type="number" class="form-control" name="vagas" id="vagas" placeholder="Digite o número de vagas" min="1" required>
-                        </div>
+                    <div class="col-12">
+                        <label for="vagas" class="form-label">Vagas Disponíveis</label>
+                        <input type="number" class="form-control" name="vagas" id="vagas" 
+                               min="1" placeholder="Número de vagas disponíveis" required>
+                        <div class="invalid-feedback">Insira o número de vagas</div>
+                    </div>
 
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">Adicionar Turma</button>
-                        </div>
-                    </form>
+                    <div class="col-12 text-center mt-4">
+                        <button type="submit" class="btn btn-primary px-5">
+                            <i class="fas fa-plus-circle me-2"></i>Adicionar Turma
+                        </button>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Form validation
+        (() => {
+            'use strict'
+            const forms = document.querySelectorAll('.needs-validation')
+            
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
 </body>
 </html>
