@@ -6,6 +6,8 @@ const fs = require('fs')
 const https = require('https')
 const cors = require('cors')
 
+const Admin = require('./model/admin')
+
 const session = require('express-session');
 const flash = require('connect-flash');
 
@@ -13,6 +15,8 @@ const bodyParser = require('body-parser')
 const sequelize = require('./config/database')
 const router = require('./routes/router')
 const adminRouter = require = require('./routes/admin-router')
+
+
 
 
 const app = express()
@@ -58,8 +62,22 @@ app.use((req, res, next) => {
 
 
 // Sync database and start HTTP server
-sequelize.sync({ force: false }).then(() => {
+sequelize.sync({ force: true }).then(async() => {
     console.log('Database connected');
+
+    const existingAdmin = await Admin.findOne({ where: { email: 'admin@techers.com' } });
+
+    if (!existingAdmin) {
+        await Admin.create({
+            email: process.env.EMAIL,
+            password: process.env.PASSWORD // de preferência, hasheado se for usado em produção!
+        });
+        console.log('Admin padrão criado com sucesso.');
+    } else {
+        console.log('Admin padrão já existe.');
+    }
+
+    
     
     // Start HTTP server
     app.listen(process.env.PORT, () => {
