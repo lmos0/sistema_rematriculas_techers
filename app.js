@@ -55,13 +55,9 @@ app.use((req, res, next) => {
     res.status(404).render('404');
 });
 
-// console.log('Checking SSL files...');
-// console.log('Key exists:', fs.existsSync(keyPath));
-// console.log('Cert exists:', fs.existsSync(certPath));
 
 
 
-// Sync database and start HTTP server
 sequelize.sync({ force: true }).then(async() => {
     console.log('Database connected');
 
@@ -70,7 +66,7 @@ sequelize.sync({ force: true }).then(async() => {
     if (!existingAdmin) {
         await Admin.create({
             email: process.env.EMAIL,
-            password: process.env.PASSWORD // de preferência, hasheado se for usado em produção!
+            password: process.env.PASSWORD 
         });
         console.log('Admin padrão criado com sucesso.');
     } else {
@@ -79,7 +75,7 @@ sequelize.sync({ force: true }).then(async() => {
 
     
     
-    // Start HTTP server
+    
     app.listen(process.env.PORT, () => {
         console.log(`HTTP Server running on port ${process.env.PORT}`);
     });
