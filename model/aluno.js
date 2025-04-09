@@ -1,135 +1,105 @@
-const {DataTypes} = require('sequelize')
-const sequelize = require('../config/database')
-const {v4:uuidv4} = require('uuid')
+// models/Aluno.js
+const mongoose = require('mongoose');
+const { v4: uuidv4 } = require('uuid');
 
-const Aluno = sequelize.define('Aluno', {
-    id:{
-        type: DataTypes.UUID,
-        primaryKey: true,
-        defaultValue: DataTypes.UUIDV4
-    },
-    nome_aluno:{
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true
-
-    },
-    data_de_nascimento:{
-        type: DataTypes.DATE,
-        allowNull: false
-    },
-
-    idade:{
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-
-    nome_aluno_busca:{
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true
-    },
-    nome_responsavel:{
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    cpf_responsavel:{
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    curso:{
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-  
-    level_atual:{
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    level_2025:{
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    segundo_curso:{
-        type: DataTypes.STRING,
-        allowNull: true,
-        defaultValue: null
-    },
-    valor_2024:{
-        type: DataTypes.DECIMAL(10,2),
-        allowNull: false
-    },
-    quantidade_parcelas_2024:{
-        type: DataTypes.INTEGER,
-        allowNull: false,
-
-    },
-    valor_2025:{
-        type: DataTypes.DECIMAL(10,2),
-        allowNull: false
-    },
-    taxa_reajuste:{
-        type: DataTypes.DECIMAL(10,2),
-        allowNull: false
-    },
-    quantidade_parcelas:{
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        defaultValue: null
-        
-    },
-    forma_de_pagamento:{
-        type: DataTypes.STRING,
-        allowNull: true,
-        defaultValue: null
-    },
-    aceite:{
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false
-    },
-    data_aceite:{
-        type: DataTypes.DATE,
-        allowNull: true,
-        defaultValue: null
-    },
-    modalidade:{
-        type: DataTypes.STRING,
-        allowNull: true,
-        defaultValue: null
-    },
-    modalidade_segundo_curso:{
-        type: DataTypes.STRING,
-        allowNull: true,
-        defaultValue: null
-    },
-    turma_2025:{
-        type: DataTypes.STRING,
-        allowNull: true,
-        defaultValue: null
-    },
-    turma_2025_segundo_curso:{
-        type: DataTypes.STRING,
-        allowNull: true,
-        defaultValue: null
-    }
-    
+const alunoSchema = new mongoose.Schema({
+  _id: {
+    type: String,
+    default: uuidv4
+  },
+  nome_aluno: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  data_de_nascimento: {
+    type: Date,
+    required: true
+  },
+  idade: {
+    type: Number,
+    required: true
+  },
+  nome_aluno_busca: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  nome_responsavel: {
+    type: String,
+    required: true
+  },
+  cpf_responsavel: {
+    type: String,
+    required: true
+  },
+  curso: {
+    type: String,
+    required: true
+  },
+  level_atual: {
+    type: Number,
+    required: true
+  },
+  level_2025: {
+    type: Number,
+    required: true
+  },
+  segundo_curso: {
+    type: String,
+    default: null
+  },
+  valor_2024: {
+    type: mongoose.Types.Decimal128,
+    required: true
+  },
+  quantidade_parcelas_2024: {
+    type: Number,
+    required: true
+  },
+  valor_2025: {
+    type: mongoose.Types.Decimal128,
+    required: true
+  },
+  taxa_reajuste: {
+    type: mongoose.Types.Decimal128,
+    required: true
+  },
+  quantidade_parcelas: {
+    type: Number,
+    default: null
+  },
+  forma_de_pagamento: {
+    type: String,
+    default: null
+  },
+  aceite: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
+  data_aceite: {
+    type: Date,
+    default: null
+  },
+  modalidade: {
+    type: String,
+    default: null
+  },
+  modalidade_segundo_curso: {
+    type: String,
+    default: null
+  },
+  turma_2025: {
+    type: String,
+    default: null
+  },
+  turma_2025_segundo_curso: {
+    type: String,
+    default: null
+  }
 }, {
+  timestamps: true
+});
 
-
-hooks: {
-    beforeValidate: (aluno) => {
-        const today = new Date();
-        const birthDate = new Date(aluno.data_de_nascimento);
-        let age = today.getFullYear() - birthDate.getFullYear();
-        const monthDifference = today.getMonth() - birthDate.getMonth();
-
-        if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
-            age--;
-        }
-
-        aluno.idade = age;
-    }
-}},)
-
-module.exports = Aluno
+module.exports = mongoose.model('Aluno', alunoSchema);

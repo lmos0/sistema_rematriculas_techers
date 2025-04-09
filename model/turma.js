@@ -1,48 +1,41 @@
-const {DataTypes} = require('sequelize')
-const sequelize = require('../config/database')
+// models/Turma.js
+const mongoose = require('mongoose');
 
-const Turma = sequelize.define('Turma', {
-    id:{
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-    },
-    nome:{
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    curso:{
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    level:{
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    faixa_etaria:{
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    modalidade:{
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    dia_semana:{
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    faixa_etaria:{
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    horario:{
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    vagas:{
-        type: DataTypes.INTEGER,
-        allowNull: false
-    }
-})
+const turmaSchema = new mongoose.Schema({
+  nome: {
+    type: String,
+    required: true
+  },
+  curso: {
+    type: String,
+    required: true
+  },
+  level: {
+    type: Number,
+    required: true
+  },
+  faixa_etaria: {
+    type: String,
+    required: true
+  },
+  modalidade: {
+    type: String,
+    required: true
+  },
+  dia_semana: {
+    type: String,
+    required: true
+  },
+  horario: {
+    type: String,
+    required: true
+  },
+  vagas: {
+    type: Number,
+    required: true
+  }
+}, {
+  timestamps: true
+});
 
-module.exports = Turma
+module.exports = mongoose.model('Turma', turmaSchema);

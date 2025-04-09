@@ -148,7 +148,7 @@
                 <div class="student-info-item">
                     <span class="info-label">Valor 2026:</span>
                     <span class="info-value text-primary fw-bold">
-                        <%= aluno.valor_2025.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %>
+                        <%= Number(aluno.valor_2025).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %>
                     </span>
                 </div>
             </div>

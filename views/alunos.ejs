@@ -498,11 +498,11 @@
                                     <td><%= item.level_atual %></td>
                                     <td><%= item.idade %></td>
                                     <td><%= item.nome_responsavel %></td>
-                                    <td><%= item.valor_2024.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %></td>
-                                    <td><%= (item.valor_2024 * item.quantidade_parcelas_2024).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %></td>
+                                    <td><%= Number(item.valor_2024).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %></td>
+                                    <td><%= (Number(item.valor_2024) * Number(item.quantidade_parcelas_2024)).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %></td>
                                     <td><%= item.taxa_reajuste %>%</td>
-                                    <td><%= item.valor_2025.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %></td>
-                                    <td>
+                                    <td><%= Number(item.valor_2025).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %></td>
+                                                                        <td>
                                         <span class="status-badge <%= item.aceite ? 'status-confirmed' : 'status-pending' %>">
                                             <%= item.aceite ? 'Confirmado' : 'Pendente' %>
                                         </span>
