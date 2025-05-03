@@ -1,5 +1,6 @@
 const Aluno = require('../model/aluno');
 const Turma = require('../model/turma');
+const mongoose = require('mongoose');
 
 async function buscarAluno(req, res) {
     const { nome_aluno } = req.body;
@@ -98,62 +99,81 @@ async function getRematricular(req, res) {
 }
 
 async function confirmarAceite(req, res) {
-    const id = req.params.id;
-    console.log(`Confirmar aceite da rematrícula ${id}`);
-    console.log('Body da requisição', req.body);
-    console.log('Session', req.session);
-    try {
-        const { cpf_responsavel } = req.body;
+    const { id } = req.params;
+    const { cpf_responsavel } = req.body;
 
+    const dbSession = await mongoose.startSession();
+    dbSession.startTransaction();
+
+    try {
         if (!id || !cpf_responsavel) {
-            return res.status(400).send("ID e CPF do responsável são obrigatórios");
+            req.flash('error', 'Dados incompletos para confirmação');
+            return res.status(400).redirect(`/rematricula/${id}/aceite`);
         }
 
-        const aluno = await Aluno.findById(id);
+        // Todas as operações dentro da transação!
+        const aluno = await Aluno.findById(id).session(dbSession);
         if (!aluno) {
+            await dbSession.abortTransaction();
             return res.status(404).json({ error: "Rematrícula não encontrada" });
         }
 
         if (aluno.cpf_responsavel !== cpf_responsavel) {
             req.flash('error', 'CPF do responsável não confere');
+            await dbSession.abortTransaction();
             return res.status(400).redirect(`/rematricula/${id}/aceite`);
         }
 
-        // Recupera as turmas salvas na sessão
-        const turma_2025 = req.session.turma_2025;
-        console.log('req.session turma_2025:', turma_2025);
-        const turma_segundo_curso = req.session.turma_2025_segundo_curso;
+        if (aluno.aceite) {
+            req.flash('info', 'Matrícula já foi confirmada anteriormente');
+            await dbSession.abortTransaction();
+            return res.redirect('/sucesso');
+        }
 
-        let turma, turma_segundo;
-        // Usando findById para turma
-        if (turma_2025) {
-            turma = await Turma.findById(turma_2025);
+        const turmaIds = [aluno.turma_2025, aluno.turma_2025_segundo_curso].filter(Boolean);
+
+        if (turmaIds.length === 0) {
+            await dbSession.abortTransaction();
+            return res.status(404).json({ error: "Nenhuma turma selecionada" });
         }
-        if (turma_segundo_curso) {
-            turma_segundo = await Turma.findById(turma_segundo_curso);
-            console.log('variável turma_segundo:', turma_segundo);
-        }
-        if (!turma && !turma_segundo) {
-            return res.status(404).json({ error: "Turma não encontrada" });
+
+        for (const turmaId of turmaIds) {
+            const turma = await Turma.findById(turmaId).session(dbSession);
+            if (!turma) {
+                req.flash('error', `Turma não encontrada`);
+                await dbSession.abortTransaction();
+                return res.status(404).redirect(`/rematricula/${id}/turma`);
+            }
+
+            if (turma.vagas <= 0) {
+                req.flash('error', `Turma ${turma.nome} está cheia`);
+                await dbSession.abortTransaction();
+                return res.status(400).redirect(`/rematricula/${id}/turma`);
+            }
+
+            // Evita duplicidade
+            if (!aluno.turmas.map(String).includes(String(turma._id))) {
+                aluno.turmas.push(turma._id);
+            }
+            if (!turma.alunos.map(String).includes(String(aluno._id))) {
+                turma.alunos.push(aluno._id);
+                turma.vagas -= 1;
+            }
+            await turma.save({ session: dbSession });
         }
 
         aluno.aceite = true;
-        // Atualiza as vagas (supondo que o campo vagas seja numérico)
-        if (turma) {
-            turma.vagas = turma.vagas - 1;
-        }
         aluno.data_aceite = new Date();
+        await aluno.save({ session: dbSession });
 
-        await aluno.save();
-        if (turma) await turma.save();
-        if (turma_segundo) {
-            turma_segundo.vagas = turma_segundo.vagas - 1;
-            await turma_segundo.save();
-        }
+        await dbSession.commitTransaction();
+        dbSession.endSession();
 
         console.log(`Rematrícula ${id} confirmada com sucesso`);
         return res.status(201).redirect('/sucesso');
     } catch (err) {
+        await dbSession.abortTransaction();
+        dbSession.endSession();
         console.error(`Erro ao confirmar aceite da rematrícula ${id}: ${err.message}`);
         return res.status(500).json({ error: err.message });
     }
