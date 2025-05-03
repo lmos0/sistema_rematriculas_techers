@@ -78,7 +78,25 @@ async function postEditTurma(req, res) {
     console.error('Erro ao editar turma:', err);
     return res.status(500).json({ error: err.message });
   }
+  
 }
+  async function visualizarAlunosnaTurma(req,res) {
+    const {turmaId} = req.params;
+
+    try {
+        const turma = await Turma.findById(turmaId).populate('alunos');
+        if (!turma) {
+            return res.status(404).json("Turma não encontrada");
+        }
+        return res.render
+    } catch (err) {
+        console.error('Erro ao buscar alunos na turma:', err);
+        return res.status(500)
+        
+    }
+  }
+
+  //TODO: remover aluno da turma
 
 module.exports = {
     addTurma,

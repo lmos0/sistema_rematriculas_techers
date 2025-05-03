@@ -159,7 +159,7 @@ async function confirmarAceite(req, res) {
                 turma.alunos.push(aluno._id);
                 turma.vagas -= 1;
             }
-            await turma.save({ session: dbSession });
+            await turma.save({ session: dbSession })
         }
 
         aluno.aceite = true;
