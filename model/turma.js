@@ -8,7 +8,8 @@ const turmaSchema = new mongoose.Schema({
   },
   curso: {
     type: String,
-    required: true
+    required: true,
+    enum: ['Programação', 'Design Gráfico', 'Robótica', 'Animação Digital']
   },
   level: {
     type: Number,
@@ -20,7 +21,8 @@ const turmaSchema = new mongoose.Schema({
   },
   modalidade: {
     type: String,
-    required: true
+    required: true,
+    enum: ['presencial', 'online', 'Híbrida']
   },
   dia_semana: {
     type: String,
@@ -32,8 +34,15 @@ const turmaSchema = new mongoose.Schema({
   },
   vagas: {
     type: Number,
-    required: true
-  }
+    required: true,
+    min: 0
+  },
+  alunos: [
+    {
+      type: String, // UUID do aluno
+      ref: 'Aluno'
+    }
+  ]
 }, {
   timestamps: true
 });

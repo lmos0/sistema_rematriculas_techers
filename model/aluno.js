@@ -9,21 +9,15 @@ const alunoSchema = new mongoose.Schema({
   },
   nome_aluno: {
     type: String,
-    required: true,
-    unique: true
-  },
-  data_de_nascimento: {
-    type: Date,
-    required: true
-  },
-  idade: {
-    type: Number,
     required: true
   },
   nome_aluno_busca: {
     type: String,
-    required: true,
-    unique: true
+    required: true
+  },
+  data_de_nascimento: {
+    type: Date,
+    required: true
   },
   nome_responsavel: {
     type: String,
@@ -37,18 +31,16 @@ const alunoSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  level_atual: {
-    type: Number,
-    required: true
-  },
-  level_2025: {
-    type: Number,
-    required: true
-  },
   segundo_curso: {
     type: String,
     default: null
   },
+  turmas: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Turma'
+    }
+  ],
   valor_2024: {
     type: mongoose.Types.Decimal128,
     required: true
@@ -66,12 +58,10 @@ const alunoSchema = new mongoose.Schema({
     required: true
   },
   quantidade_parcelas: {
-    type: Number,
-    default: null
+    type: Number
   },
   forma_de_pagamento: {
-    type: String,
-    default: null
+    type: String
   },
   aceite: {
     type: Boolean,
@@ -79,27 +69,54 @@ const alunoSchema = new mongoose.Schema({
     default: false
   },
   data_aceite: {
-    type: Date,
-    default: null
+    type: Date
   },
   modalidade: {
-    type: String,
-    default: null
+    type: String
   },
   modalidade_segundo_curso: {
-    type: String,
-    default: null
-  },
-  turma_2025: {
-    type: String,
-    default: null
-  },
-  turma_2025_segundo_curso: {
-    type: String,
-    default: null
+    type: String
   }
 }, {
   timestamps: true
 });
+
+alunoSchema.virtual('idade').get(function () {
+
+  if (!this.data_de_nascimento){
+    return null
+  }
+
+  try {
+    const hoje = new Date()
+    const nascimento = new Date(this.data_de_nascimento)
+
+    if (isNaN(nascimento.getTime())){
+      console.warn('Data de nascimento inválida para o aluno:', this._id)
+      return null
+    }
+
+    let idade = hoje.getFullYear() - nascimento.getFullYear()
+
+    const aniversarioEsteAno = new Date(hoje.getFullYear(), nascimento.getMonth(), nascimento.getDate());
+    const aniversarioJaOcorreu = hoje >= aniversarioEsteAno;
+
+    if (!aniversarioJaOcorreu){
+      idade--
+    }
+
+    return idade
+    
+  } catch (error) {
+    console.error('Erro ao calcular idade do aluno:', error);
+    return null;
+  }
+
+})
+
+alunoSchema.pre('save', function(next) {
+  this.nome_aluno_busca = this.nome_aluno.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  next()
+})
 
 module.exports = mongoose.model('Aluno', alunoSchema);

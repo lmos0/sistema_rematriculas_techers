@@ -32,11 +32,45 @@ function validarCamposObrigatorios(obj, camposObrigatorios) {
     console.error(mensagem, erro);
     return res.status(500).json({ error: erro.message });
   }
+
+  function calcularIdade(){
+
+    if (!this.data_de_nascimento){
+      return null
+    }
+  
+    try {
+      const hoje = new Date()
+      const nascimento = new Date(this.data_de_nascimento)
+  
+      if (isNaN(nascimento.getTime())){
+        console.warn('Data de nascimento inválida para o aluno:', this._id)
+        return null
+      }
+  
+      let idade = hoje.getFullYear() - nascimento.getFullYear()
+  
+      const aniversarioEsteAno = new Date(hoje.getFullYear(), nascimento.getMonth(), nascimento.getDate());
+      const aniversarioJaOcorreu = hoje >= aniversarioEsteAno;
+  
+      if (!aniversarioJaOcorreu){
+        idade--
+      }
+  
+      return idade
+      
+    } catch (error) {
+      console.error('Erro ao calcular idade do aluno:', error);
+      return null;
+    }
+
+  }
   
   module.exports = {
     validarCamposObrigatorios,
     validarCPF,
     calcularValoresProximosAno,
-    tratarErro
+    tratarErro,
+    calcularIdade
   };
   
